@@ -1,38 +1,26 @@
-import React from "react";
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { AuthProvider, useAuth } from "./contexts/AuthContext";
-import Login from "./components/pages/Login";
-import Dashboard from "./components/pages/Dashboard";
+import React, { useState, useEffect } from 'react';
+import { BrowserRouter as Router } from 'react-router-dom';
+import { AuthProvider } from './contexts/AuthContext';
+import AppRoutes from './routes';
+
 function App() {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(false); 
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <AuthProvider>
       <Router>
-        <Routes>
-          <Route path="/login" element={<Login />} />
-          
-          {/* Rota privada */}
-          <Route 
-            path="/dashboard" 
-            element={<PrivateRoute component={Dashboard} />} 
-          />
-
-          <Route path="/" element={<Navigate to="/login" />} />
-        </Routes>
+        <AppRoutes />
       </Router>
     </AuthProvider>
   );
-}
-
-function PrivateRoute({ component: Component }) {
-  const { user } = useAuth();
-
-  // Se o usuário não estiver logado, redireciona para o login
-  if (!user) {
-    return <Navigate to="/login" />;
-  }
-
-  // Se o usuário estiver logado, renderiza o componente desejado
-  return <Component />;
 }
 
 export default App;
