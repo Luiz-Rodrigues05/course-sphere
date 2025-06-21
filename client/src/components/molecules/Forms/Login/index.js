@@ -1,14 +1,36 @@
 import React, { useState } from 'react';
 import Input from '../../../atoms/Input';
 import Button from '../../../atoms/Button';
+import { useSnackbar } from 'notistack';
 import styles from './Login.module.css';
 
 const LoginForm = ({ onSubmit }) => {
+  const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  const showError = (message) => {
+    enqueueSnackbar(message, { variant: 'error' });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    if (!email && !password) {
+      showError('Email e senha são obrigatórios.');
+      return;
+    }
+
+    if (!email) {
+      showError('O email é obrigatório.');
+      return;
+    }
+
+    if (!password) {
+      showError('A senha é obrigatória.');
+      return;
+    }
+
     onSubmit({ email, password });
   };
 
