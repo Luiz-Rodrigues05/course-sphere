@@ -1,0 +1,66 @@
+{
+    "users": [
+      {
+        "id": 1,
+        "name": "João Silva",
+        "email": "joao.silva@email.com",
+        "password": "123456"
+      },
+      {
+        "id": 2,
+        "name": "Maria Oliveira",
+        "email": "maria.oliveira@email.com",
+        "password": "654321"
+      }
+    ],
+    "courses": [
+      {
+        "id": 1,
+        "name": "Curso de React",
+        "description": "Aprenda React do zero!",
+        "start_date": "2025-06-01",
+        "end_date": "2025-07-01",
+        "creator_id": 1,
+        "instructors": [1, 2]
+      },
+      {
+        "id": 2,
+        "name": "Curso de JavaScript",
+        "description": "Fundamentos do JavaScript",
+        "start_date": "2025-06-10",
+        "end_date": "2025-08-10",
+        "creator_id": 2,
+        "instructors": [2]
+      }
+    ],
+    "lessons": [
+      {
+        "id": 1,
+        "title": "Introdução ao React",
+        "status": "published",
+        "publish_date": "2025-06-01",
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "course_id": 1,
+        "creator_id": 1
+      },
+      {
+        "id": 2,
+        "title": "Componentes em React",
+        "status": "draft",
+        "publish_date": "2025-06-02",
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "course_id": 1,
+        "creator_id": 1
+      },
+      {
+        "id": 3,
+        "title": "Fundamentos de JavaScript",
+        "status": "published",
+        "publish_date": "2025-06-11",
+        "video_url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        "course_id": 2,
+        "creator_id": 2
+      }
+    ]
+  }
+  
