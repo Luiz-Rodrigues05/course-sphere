@@ -1,0 +1,12 @@
+/* Estilo para a página de login */
+.login-page {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f3f4f6;
+    flex-direction: column;
+    text-align: center;
+    padding: 20px;
+  }
+  

@@ -1,0 +1,21 @@
+/* Estilo para o input */
+.input-container {
+    margin-bottom: 15px;
+}
+
+.input {
+    width: 100%;
+    padding: 10px;
+    margin-top: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    box-sizing: border-box;
+}
+  
+/* Estilo para o placeholder */
+.input::placeholder {
+    color: #888;
+    font-style: italic;
+}
+  

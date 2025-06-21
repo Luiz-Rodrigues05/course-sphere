@@ -1,0 +1,19 @@
+/* Estilo para o Card de Login */
+.login-card {
+    background-color: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  }
+  
+  /* Estilo para o título */
+  .login-card h2 {
+    font-size: 24px;
+    color: #007bff;
+    margin-bottom: 20px;
+  }
+
+  
