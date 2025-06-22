@@ -15,7 +15,6 @@ const CourseList = () => {
 
   useEffect(() => {
     const fetchCourses = async () => {
-        console.log(user)
       if (!user?.id) {
         setLoading(false);
         return;
@@ -35,7 +34,7 @@ const CourseList = () => {
     };
 
     fetchCourses();
-  }, [user]);
+  }, [user?.id]);
 
   if (loading) {
     return <p>Carregando cursos...</p>;

@@ -4,7 +4,7 @@ const baseURL = '/courses';
 
 export const getCourses = async (userID) => {
   try {
-    const response = await request('POST', `/user/${userID}${baseURL}`, {
+    const response = await request('GET', `/user/${userID}${baseURL}`, {
       userID
     });
 
