@@ -32,3 +32,11 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+a {
+  /* Remove o sublinhado */
+  text-decoration: none;
+
+  /* Faz o link herdar a cor do seu elemento pai. */
+  color: inherit;
+}
