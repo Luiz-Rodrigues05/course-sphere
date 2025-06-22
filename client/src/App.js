@@ -3,6 +3,8 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { AuthProvider } from "./contexts/AuthContext";
 import AppRoutes from "./routes";
 import { SnackbarProvider } from "notistack";
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -16,13 +18,15 @@ function App() {
   }
 
   return (
-    <AuthProvider>
-      <SnackbarProvider maxSnack={3}>
-        <Router>
-          <AppRoutes />
-        </Router>
-      </SnackbarProvider>
-    </AuthProvider>
+    <ThemeProvider theme={theme}>
+      <AuthProvider>
+        <SnackbarProvider maxSnack={3}>
+          <Router>
+            <AppRoutes />
+          </Router>
+        </SnackbarProvider>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
