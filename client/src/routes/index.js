@@ -1,27 +1,28 @@
 import React from 'react';
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate, Outlet } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
+
 import Login from '../components/pages/Login';
 import Dashboard from '../components/pages/Dashboard';
 import CourseDetails from '../components/pages/CourseDetails';
+import ProtectedLayout from '../components/layouts/ProtectedLayout';
+
+const AuthGuard = () => {
+  const { user } = useAuth();
+  return user ? <ProtectedLayout /> : <Navigate to="/login" replace />;
+};
 
 const AppRoutes = () => {
-  const { user } = useAuth();
-
   return (
     <Routes>
-      {/* Rota padrão, redireciona para /login */}
-      <Route path="/" element={<Navigate to="/login" />} />
+      <Route path="/login" element={<Login />} />
 
-      {/* Se o usuário não estiver logado, redireciona para /login */}
-      <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
-      
-      {/* Rota privada que exige que o usuário esteja logado */}
-      <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
+      <Route element={<AuthGuard />}>
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/courses/:courseID" element={<CourseDetails />} />
+      </Route>
 
-      <Route path="/courses/:courseID" element={user ? <CourseDetails /> : <Navigate to="/login" />} />
-      
-      
+      <Route path="*" element={<Navigate to="/dashboard" />} />
     </Routes>
   );
 };

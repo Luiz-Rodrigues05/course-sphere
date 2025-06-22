@@ -9,13 +9,10 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   return (
-    <div className={styles.dashboardPage}>
-      <Header />
-      <main className={styles.mainContent}>
-        <Heading text={"Bem-vindo(a), " + user.name + "!"} level={1} />
-        <CourseList />
-      </main>
-    </div>
+    <>
+      <Heading text={"Bem-vindo(a), " + user.name + "!"} level={1} />
+      <CourseList />
+    </>
   );
 };
 

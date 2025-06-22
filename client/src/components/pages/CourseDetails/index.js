@@ -33,19 +33,16 @@ const CourseDetails = () => {
   if (!course) return <p>Curso não encontrado.</p>;
 
   return (
-    <div className={styles.courseDetailsPage}>
-      <Header />
-      <main className={styles.mainContent}>
-        <Heading text={course.name} level={1} />
-        <p className={styles.description}>{course.description}</p>
-        <div className={styles.dates}>
-          <span>Início: {new Date(course.start_date).toLocaleDateString()}</span>
-          <span>Fim: {new Date(course.end_date).toLocaleDateString()}</span>
-        </div>
-
-        <LessonList courseID={courseID} />
-      </main>
+    <main className={styles.mainContent}>
+    <Heading text={course.name} level={1} />
+    <p className={styles.description}>{course.description}</p>
+    <div className={styles.dates}>
+        <span>Início: {new Date(course.start_date).toLocaleDateString()}</span>
+        <span>Fim: {new Date(course.end_date).toLocaleDateString()}</span>
     </div>
+
+    <LessonList courseID={courseID} />
+    </main>
   );
 };
 
