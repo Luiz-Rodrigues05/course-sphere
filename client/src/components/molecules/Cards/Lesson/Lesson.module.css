@@ -1,0 +1,42 @@
+.card {
+    display: flex;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  
+  .thumbnail {
+    width: 160px;
+    height: 90px;
+    object-fit: cover;
+  }
+  
+  .info {
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .title {
+    margin: 0 0 0.5rem 0;
+    font-size: 1.1rem;
+  }
+  
+  .status {
+    font-size: 0.8rem;
+    padding: 0.2rem 0.5rem;
+    border-radius: 12px;
+    color: #fff;
+    align-self: flex-start;
+  }
+  
+  .status.published {
+    background-color: #28a745;
+  }
+  
+  .status.draft {
+    background-color: #6c757d;
+  }

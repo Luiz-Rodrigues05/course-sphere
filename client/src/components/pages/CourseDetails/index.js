@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCourse } from '../../../services/course';
-import Heading from '../../atoms/Heading';
 import Header from '../../organisms/Header';
+import Heading from '../../atoms/Heading';
+import LessonList from '../../organisms/LessonList';
 import styles from './CourseDetails.module.css';
 
 const CourseDetails = () => {
@@ -13,31 +14,23 @@ const CourseDetails = () => {
 
   useEffect(() => {
     const fetchCourseDetails = async () => {
+      if (!courseID) return;
       try {
         setLoading(true);
-        const courseData = await getCourse(courseID);
-        setCourse(courseData);
+        const { data } = await getCourse(courseID);
+        setCourse(data);
       } catch (err) {
         setError(err.message);
       } finally {
         setLoading(false);
       }
     };
-
     fetchCourseDetails();
   }, [courseID]);
 
-  if (loading) {
-    return <p>Carregando detalhes do curso...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
-  }
-
-  if (!course) {
-    return <p>Curso não encontrado.</p>;
-  }
+  if (loading) return <p>Carregando detalhes do curso...</p>;
+  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (!course) return <p>Curso não encontrado.</p>;
 
   return (
     <div className={styles.courseDetailsPage}>
@@ -49,6 +42,8 @@ const CourseDetails = () => {
           <span>Início: {new Date(course.start_date).toLocaleDateString()}</span>
           <span>Fim: {new Date(course.end_date).toLocaleDateString()}</span>
         </div>
+
+        <LessonList courseID={courseID} />
       </main>
     </div>
   );
