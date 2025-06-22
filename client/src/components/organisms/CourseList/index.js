@@ -23,11 +23,10 @@ const CourseList = () => {
       try {
         setLoading(true);
         const coursesData = await getCourses(user.id);
-        setCourses(coursesData);
+        setCourses(coursesData.data);
         setError(null);
       } catch (err) {
         setError(err.message);
-        console.error("Falha ao buscar cursos:", err);
       } finally {
         setLoading(false);
       }

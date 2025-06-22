@@ -67,13 +67,15 @@ const LessonList = ({ courseID }) => {
 
       {isLoading ? (
         <p>Carregando aulas...</p>
-      ) : error ? (
+        ) : error ? (
         <p style={{ color: 'red' }}>{error}</p>
-      ) : lessons.length > 0 ? (
-        lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)
-      ) : (
+        ) : lessons.length > 0 ? (
+        <div className={styles.gridContainer}>
+            {lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
+        </div>
+        ) : (
         <p>Nenhuma aula encontrada para os filtros selecionados.</p>
-      )}
+    )}
 
       <Pagination
         currentPage={currentPage}

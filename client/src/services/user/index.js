@@ -3,8 +3,7 @@ import request from '../../services/axios';
 export const login = async (email, password) => {
   try {
     const response = await request('POST', '/login', {
-      email,
-      password
+      data: { email, password },
     });
 
     return response;

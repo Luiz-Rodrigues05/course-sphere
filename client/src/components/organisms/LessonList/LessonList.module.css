@@ -16,3 +16,26 @@
     background-color: #fff;
     min-width: 180px;
   }
+  
+  .gridContainer {
+    display: flex;
+    flex-direction: row;
+    overflow-x: auto;
+    gap: 1.5rem;
+    padding: 0.5rem 0 1.5rem 0;
+  }
+  
+  .gridContainer::-webkit-scrollbar {
+    height: 8px;
+  }
+  .gridContainer::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  .gridContainer::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 4px;
+  }
+  .gridContainer::-webkit-scrollbar-thumb:hover {
+    background: #aaa;
+  }

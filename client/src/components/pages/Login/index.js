@@ -40,7 +40,7 @@ const LoginPage = () => {
 
     try {
       const user = await login(email, password);
-      setUser(user);
+      setUser(user.data);
       navigate('/dashboard');
     } catch (err) {
       enqueueSnackbar(err.message, { variant: 'error' });
