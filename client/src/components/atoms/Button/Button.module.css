@@ -1,8 +1,8 @@
 /* Estilos para o botão */
 .btn {
   padding: 10px 20px;
-  background-color: #FF7043;
-  color: white;
+  background-color: var(--color-secondary-cta);
+  color: var(--color-background-light);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -13,11 +13,25 @@
 }
 
 .btn:hover {
-  background-color: #E65A2E;
+  background-color: var(--color-secondary-cta-hover);
 }
 
-/* Botão desabilitado */
 .btn:disabled {
   background-color: #cccccc;
   cursor: not-allowed;
+}
+
+.small {
+  font-size: 0.875rem;
+  padding: 6px 12px;
+}
+
+.medium {
+  font-size: 1rem;
+  padding: 10px 20px;
+}
+
+.large {
+  font-size: 1.125rem;
+  padding: 12px 24px;
 }

@@ -1,7 +1,7 @@
 /* Estilo para o título */
 .heading {
     font-size: 36px;
-    color: #0A3A2C;
+    color: var(--colot-text-on-light);
     margin-bottom: 10px;
   }
   

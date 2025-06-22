@@ -3,14 +3,14 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #147247;
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-text-on-dark);
   }
   
   .logo a {
     display: flex;
     text-decoration: none;
-    color: white;
+    color: var(--color-text-on-dark);
   }
   
   .logoLink h3 {
@@ -18,7 +18,7 @@
     font-weight: 600;
     letter-spacing: 0.5px;
     margin: 0;
-    color: #a7ffeb;
+    color: var(--color-primary-accent);
   }
   
   .navLinks {
@@ -28,11 +28,11 @@
   
   .navLinks button {
     background-color: transparent;
-    color: #a7ffeb;
+    color: var(--color-primary-accent);
   }
 
   .navLinks a {
-    text-decoration: none; /* Remove a linha de todos os links na navbar */
+    text-decoration: none;
   }
   
   .navLinks button:hover {
