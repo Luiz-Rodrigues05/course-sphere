@@ -1,15 +1,19 @@
 /* Estilos para o botão */
 .btn {
   padding: 10px 20px;
-  background-color: #007bff;
+  background-color: #FF7043;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+  gap: 8px;
 }
 
 .btn:hover {
-  background-color: #0056b3;
+  background-color: #E65A2E;
 }
 
 /* Botão desabilitado */

@@ -1,13 +1,13 @@
 .dashboardPage {
-    background-color: #f9f9f9;
-    min-height: 100vh;
-  }
-  
-  .mainContent {
-    padding: 20px;
-  }
-  
-  .mainContent h2 {
-      text-align: left;
-      margin-bottom: 20px;
-  }
+  background-color: #f9f9f9;
+  min-height: 100vh;
+}
+
+.mainContent {
+  padding: 20px;
+}
+
+.mainContent h2 {
+    text-align: left;
+    margin-bottom: 20px;
+}

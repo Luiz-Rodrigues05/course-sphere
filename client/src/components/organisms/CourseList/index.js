@@ -49,7 +49,7 @@ const CourseList = () => {
     <div className={styles.courseListContainer}>
       <div className={styles.header}>
         <Heading text="Meus Cursos" level={2} />
-        <Button text="Criar Novo Curso" />
+        <Button>Criar Novo Curso</Button>
       </div>
       <div className={styles.grid}>
         {courses.length > 0 ? (

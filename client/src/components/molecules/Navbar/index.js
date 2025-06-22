@@ -5,21 +5,29 @@ import Button from '../../atoms/Button';
 import Heading from '../../atoms/Heading';
 import styles from './Navbar.module.css';
 
+import { IoSchoolSharp, IoHome, IoLogOutOutline } from 'react-icons/io5';
+
 const Navbar = () => {
   const { logout } = useAuth();
 
   return (
     <nav className={styles.navbar}>
-      <div className={styles.logo}>
-        <Link to="/dashboard">
-          <Heading text="CourseSphere" level={3} />
-        </Link>
-      </div>
+      <Link to="/dashboard" className={styles.logoLink}>
+        <IoSchoolSharp className={styles.logoIcon} />
+        <Heading text="CourseSphere" level={3} />
+      </Link>
+
       <div className={styles.navLinks}>
         <Link to="/dashboard">
-          <Button text="Home" />
+          <Button variant="ghost">
+            <IoHome />
+            Home
+          </Button>
         </Link>
-        <Button text="Sair" onClick={logout} />
+        <Button variant="ghost" onClick={logout}>
+          <IoLogOutOutline />
+          Sair
+        </Button>
       </div>
     </nav>
   );

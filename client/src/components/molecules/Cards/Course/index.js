@@ -12,7 +12,7 @@ const CourseCard = ({ name, description, startDate, endDate }) => {
         <span>Início: {new Date(startDate).toLocaleDateString()}</span>
         <span>Fim: {new Date(endDate).toLocaleDateString()}</span>
       </div>
-      <Button text="Ver detalhes" />
+      <Button>Ver detalhes</Button>
     </div>
   );
 };

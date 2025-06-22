@@ -50,7 +50,7 @@ const LoginForm = ({ onSubmit, loading }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button text={loading ? "Carregando..." : "Entrar"} type="submit" disabled={loading} />
+      <Button type="submit" disabled={loading}>{loading ? "Carregando..." : "Entrar"}</Button>
     </form>
   );
 };

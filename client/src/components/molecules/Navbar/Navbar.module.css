@@ -3,18 +3,22 @@
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    background-color: #2c3e50;
+    background-color: #147247;
     color: white;
   }
   
   .logo a {
+    display: flex;
     text-decoration: none;
     color: white;
   }
   
-  .logo h3 {
+  .logoLink h3 {
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.5px;
     margin: 0;
-    color: #ecf0f1;
+    color: #a7ffeb;
   }
   
   .navLinks {
@@ -22,13 +26,39 @@
     gap: 15px;
   }
   
-  .navLinks a button,
   .navLinks button {
-    background-color: #3498db;
+    background-color: transparent;
+    color: #a7ffeb;
+  }
+
+  .navLinks a {
+    text-decoration: none; /* Remove a linha de todos os links na navbar */
+  }
+  
+  .navLinks button:hover {
+    background-color: rgba(255, 255, 255, 0.1); /* Um brilho sutil ao passar o mouse */
+    border-color: rgba(255, 255, 255, 0.8);
+  }
+  
+  /* NOVO: Estilo para o link do logo */
+  .logoLink {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre o ícone e o texto */
+    text-decoration: none;
     color: white;
   }
   
-  .navLinks a button:hover,
-  .navLinks button:hover {
-    background-color: #2980b9;
+  /* NOVO: Estilo para o ícone */
+  .logoIcon {
+    font-size: 2rem; /* Tamanho do ícone */
+    color: #a7ffeb; /* Um tom de verde-água claro para o ícone */
+  }
+  
+  /* Estilo para o texto do logo (h3) */
+  .logoLink h3 {
+    font-family: 'Poppins', sans-serif; /* A FONTE CUSTOMIZADA */
+    font-weight: 600; /* Um peso de fonte mais marcante */
+    margin: 0;
+    letter-spacing: 0.5px; /* Espaçamento leve entre as letras */
   }
