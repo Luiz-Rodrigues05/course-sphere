@@ -16,3 +16,15 @@ export const getCourses = async (userID) => {
     throw new Error(error.message || 'Erro desconhecido.');
   }
 };
+
+export const getCourse = async (courseID) => {
+  try {
+    const response = await request('GET', `${baseURL}/${courseID}`);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao obter os detalhes do curso.');
+    }
+    throw new Error(error.message || 'Erro desconhecido.');
+  }
+};

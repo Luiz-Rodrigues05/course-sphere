@@ -54,11 +54,7 @@ const CourseList = () => {
         {courses.length > 0 ? (
           courses.map(course => (
             <CourseCard
-              key={course.id}
-              name={course.name}
-              description={course.description}
-              startDate={course.start_date}
-              endDate={course.end_date}
+              course={course}
             />
           ))
         ) : (
