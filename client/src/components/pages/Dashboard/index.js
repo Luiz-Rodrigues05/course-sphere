@@ -1,13 +1,20 @@
 import React from "react";
 import { useAuth } from "../../../contexts/AuthContext";
+import Header from "../../organisms/Header";
+import Heading from "../../atoms/Heading";
+import CourseList from "../../organisms/CourseList";
+import styles from './Dashboard.module.css';
 
 const Dashboard = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
 
   return (
-    <div>
-      <h2>Bem-vindo, {user.name}!</h2>
-      <button onClick={logout}>Sair</button>
+    <div className={styles.dashboardPage}>
+      <Header />
+      <main className={styles.mainContent}>
+        <Heading text={"Bem-vindo(a), " + user.name + "!"} level={1} />
+        <CourseList />
+      </main>
     </div>
   );
 };

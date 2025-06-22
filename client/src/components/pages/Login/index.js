@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import LoginCard from '../../organisms/Cards/Login';
+import LoginCard from '../../molecules/Cards/Login';
 import Heading from '../../atoms/Heading';
 import styles from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../../services/users';
+import { login } from '../../../services/user';
 import { useAuth } from '../../../contexts/AuthContext';
 import { useSnackbar } from 'notistack';
 
