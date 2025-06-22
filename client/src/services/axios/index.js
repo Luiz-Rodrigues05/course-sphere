@@ -12,8 +12,6 @@ const request = async (method, url, data = {}) => {
       data,
     });
 
-    await new Promise(resolve => setTimeout(resolve, 5000));
-
     return response.data;
   } catch (error) {
     if (error.response) {

@@ -1,25 +1,30 @@
-import React, { createContext, useState, useContext } from "react";
+import React, { createContext, useState, useContext, useEffect } from "react";
 
-// Criando o contexto para autenticação
 const AuthContext = createContext();
 
-// Custom Hook para acessar o AuthContext
 export const useAuth = () => {
   return useContext(AuthContext);
 };
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Estado para o usuário
+  const [user, setUser] = useState(null)
 
-  // Função para login
   const login = (userData) => {
-    setUser(userData); // Armazena o usuário após o login
+    setUser(userData);
+    localStorage.setItem("user", JSON.stringify(userData));
   };
 
-  // Função para logout
   const logout = () => {
-    setUser(null); // Limpa os dados do usuário
+    setUser(null);
+    localStorage.removeItem("user");
   };
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, login, logout }}>
