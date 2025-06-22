@@ -19,7 +19,7 @@ const AppRoutes = () => {
       {/* Rota privada que exige que o usuário esteja logado */}
       <Route path="/dashboard" element={user ? <Dashboard /> : <Navigate to="/login" />} />
 
-      <Route path="/courses/:courseId" element={user ? <CourseDetails /> : <Navigate to="/login" />} />
+      <Route path="/courses/:courseID" element={user ? <CourseDetails /> : <Navigate to="/login" />} />
       
       
     </Routes>

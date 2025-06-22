@@ -84,3 +84,52 @@ server.get('/course/:courseID', (req, res) => {
   // Se o curso for encontrado, retorna os dados com status 200 (OK)
   res.status(200).json(course);
 });
+
+server.get('/courses/:courseID/lessons', (req, res) => {
+  const { courseID } = req.params;
+  const courseId = parseInt(courseID, 10);
+
+  // 1. Validar se o curso existe no banco de dados
+  const course = db.courses.find(c => c.id === courseId);
+  if (!course) {
+    return res.status(404).json({ message: 'Curso não encontrado.' });
+  }
+
+  // 2. Capturar parâmetros da query para busca, filtro e paginação
+  //    - 'q' para busca textual no título (search Query)
+  //    - 'status' para filtrar por status ('published' ou 'draft')
+  //    - '_page' e '_limit' para paginação (com valores padrão)
+  const { q, status, _page = 1, _limit = 10 } = req.query;
+  const page = parseInt(_page, 10);
+  const limit = parseInt(_limit, 10);
+
+  // 3. Iniciar com todas as aulas que pertencem ao curso
+  let lessons = db.lessons.filter(lesson => lesson.courseId === courseId);
+
+  // 4. Aplicar o filtro de busca textual (parâmetro 'q')
+  if (q) {
+    const searchTerm = q.toLowerCase();
+    lessons = lessons.filter(lesson => 
+      lesson.title.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  // 5. Aplicar o filtro por status (parâmetro 'status')
+  if (status) {
+    lessons = lessons.filter(lesson => lesson.status === status);
+  }
+
+  // 6. Aplicar a paginação
+  const totalCount = lessons.length; // Total de itens *após* os filtros
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const paginatedLessons = lessons.slice(startIndex, endIndex);
+
+  // 7. Enviar o 'X-Total-Count' no cabeçalho da resposta.
+  //    Isso é crucial para o frontend saber o total de páginas.
+  res.setHeader('X-Total-Count', totalCount);
+  res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count'); // Permite que o navegador acesse o header
+
+  // 8. Retornar as aulas paginadas e filtradas
+  res.status(200).json(paginatedLessons);
+});
