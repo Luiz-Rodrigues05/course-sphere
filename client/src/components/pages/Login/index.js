@@ -3,8 +3,11 @@ import LoginCard from '../../organisms/Cards/Login';
 import Heading from '../../atoms/Heading';
 import styles from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
+import { login } from '../../../services/users';
+import { useSnackbar } from 'notistack';
 
 const LoginPage = () => {
+  const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const navigate = useNavigate();
@@ -15,27 +18,29 @@ const LoginPage = () => {
     setLoading(true);
     setError('');
 
-    // Requisição para o JSON Server
+    if (!email && !password) {
+      enqueueSnackbar('Email e senha são obrigatórios.', { variant: 'error' });
+      setLoading(false);
+      return;
+    }
+
+    if (!email) {
+      enqueueSnackbar('O email é obrigatório.', { variant: 'error' });
+      setLoading(false);
+      return;
+    }
+
+    if (!password) {
+      enqueueSnackbar('A senha é obrigatória.', { variant: 'error' });
+      setLoading(false);
+      return;
+    }
+
     try {
-      const response = await fetch('http://localhost:5000/users'); // Supondo que o JSON Server esteja rodando na porta 5000
-      const users = await response.json();
-
-      // Verificando se o usuário existe
-      const user = users.find(
-        (user) => user.email === email && user.password === password
-      );
-
-      if (user) {
-        // Usuário autenticado com sucesso
-        console.log('Login realizado com sucesso!', user);
-        navigate('/dashboard');
-      } else {
-        // Usuário não encontrado
-        setError('Credenciais inválidas.');
-      }
+      const user = await login(email, password);
+      navigate('/dashboard');
     } catch (err) {
-      console.error('Erro ao fazer a requisição:', err);
-      setError('Erro ao tentar fazer login. Tente novamente.');
+      enqueueSnackbar(err.message, { variant: 'error' });
     }
 
     setLoading(false);
@@ -46,9 +51,7 @@ const LoginPage = () => {
       <div className={styles['welcome-text']}>
         <Heading text="Bem-vindo(a) à CourseSphere!" level={1} />
       </div>
-      <LoginCard onSubmit={handleLoginSubmit} />
-      {loading && <p>Carregando...</p>}
-      {error && <p className={styles.error}>{error}</p>}
+      <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
     </div>
   );
 };

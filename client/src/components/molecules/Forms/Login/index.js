@@ -4,7 +4,7 @@ import Button from '../../../atoms/Button';
 import { useSnackbar } from 'notistack';
 import styles from './Login.module.css';
 
-const LoginForm = ({ onSubmit }) => {
+const LoginForm = ({ onSubmit, loading }) => {
   const { enqueueSnackbar } = useSnackbar();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,7 +50,7 @@ const LoginForm = ({ onSubmit }) => {
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
-      <Button text="Entrar" type="submit" />
+      <Button text={loading ? "Carregando..." : "Entrar"} type="submit" disabled={loading} />
     </form>
   );
 };
