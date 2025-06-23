@@ -43,7 +43,7 @@ export const getCourseInstructors = async (courseID, params) => {
 
 export const createCourse = async (courseData) => {
   try {
-    const response = await request('POST', baseURL, courseData);
+    const response = await request('POST', baseURL, {data: courseData});
     return response;
   } catch (error) {
     if (error.response) {
@@ -55,7 +55,7 @@ export const createCourse = async (courseData) => {
 
 export const updateCourse = async (courseID, courseData) => {
   try {
-    const response = await request('PUT', `${baseURL}/${courseID}`, courseData);
+    const response = await request('PUT', `${baseURL}/${courseID}`, {data: courseData});
     return response;
   } catch (error) {
     if (error.response) {

@@ -54,6 +54,78 @@ server.get('/user/:userID/courses', (req, res) => {
   res.status(200).json(courses);
 });
 
+server.post('/courses', (req, res) => {
+  const courseData = req.body;
+  // Simples validação para garantir que os dados essenciais foram enviados
+  if (!courseData.name || !courseData.creator_id) {
+    return res.status(400).json({ message: 'Dados insuficientes para criar o curso.' });
+  }
+
+  const courses = router.db.get('courses');
+  // Gera um novo ID para o curso
+  const newId = courses.value().length > 0 ? Math.max(...courses.map(c => c.id).value()) + 1 : 1;
+  
+  const newCourse = {
+    id: newId,
+    ...courseData
+  };
+  
+  courses.push(newCourse).write();
+  
+  res.status(201).json(newCourse);
+});
+
+// PUT /courses/:id - Atualizar um curso existente
+server.put('/courses/:id', (req, res) => {
+    const courseId = parseInt(req.params.id, 10);
+    const updatedData = req.body;
+
+    if (isNaN(courseId)) {
+        return res.status(400).json({ message: 'O ID do curso deve ser um número.' });
+    }
+
+    const course = router.db.get('courses').find({ id: courseId });
+
+    if (!course.value()) {
+        return res.status(404).json({ message: 'Curso não encontrado.' });
+    }
+
+    // Atualiza o curso, garantindo que o creator_id não seja alterado
+    const result = course.assign({
+        name: updatedData.name,
+        description: updatedData.description,
+        start_date: updatedData.start_date,
+        end_date: updatedData.end_date,
+        // Garante que outros campos como instructors e creator_id não sejam sobrescritos se não vierem na request
+    }).write();
+
+    res.status(200).json(result);
+});
+
+
+// DELETE /courses/:id - Deletar um curso e suas aulas
+server.delete('/courses/:id', (req, res) => {
+    const courseId = parseInt(req.params.id, 10);
+
+    if (isNaN(courseId)) {
+        return res.status(400).json({ message: 'O ID do curso deve ser um número.' });
+    }
+
+    const course = router.db.get('courses').find({ id: courseId }).value();
+
+    if (!course) {
+        return res.status(404).json({ message: 'Curso não encontrado.' });
+    }
+    
+    // Deletar aulas associadas ao curso
+    router.db.get('lessons').remove({ course_id: courseId }).write();
+    
+    // Deletar o curso
+    router.db.get('courses').remove({ id: courseId }).write();
+
+    res.status(200).json({ message: 'Curso e aulas associadas deletados com sucesso.' });
+});
+
 // Endpoint para buscar um curso
 server.get('/course/:courseID', (req, res) => {
   const { courseID } = req.params;

@@ -54,7 +54,12 @@ const CoursesList = () => {
       if (selectedCourse) {
         await updateCourse(selectedCourse.id, courseData);
       } else {
-        await createCourse({ ...courseData, userId: user.id });
+        const newCourseData = {
+          ...courseData,
+          creator_id: user.id,
+          instructors: [],
+        };
+        await createCourse(newCourseData);
       }
       fetchCourses();
       handleCloseModal();
