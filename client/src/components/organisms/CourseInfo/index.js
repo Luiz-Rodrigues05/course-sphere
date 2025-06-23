@@ -4,7 +4,7 @@ import { Settings } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { getCourseInfoStyles } from './styles';
 
-const CourseInfo = ({ course }) => {
+const CourseInfo = ({ course, onEdit, canEdit }) => {
   const theme = useTheme();
   const styles = getCourseInfoStyles(theme);
 
@@ -15,9 +15,15 @@ const CourseInfo = ({ course }) => {
           {course.name}
         </Typography>
         
-        <IconButton aria-label="Editar informações do curso" size="small">
-          <Settings sx={{ color: theme.palette.text.primary }}/>
-        </IconButton>
+        {canEdit && (
+          <IconButton 
+            aria-label="Editar informações do curso" 
+            size="small"
+            onClick={() => onEdit(course)}
+          >
+            <Settings sx={{ color: theme.palette.text.primary }}/>
+          </IconButton>
+        )}
       </Box>
 
       <Typography variant="body1" component="p" sx={{ mb: 2 }}>
