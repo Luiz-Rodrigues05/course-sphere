@@ -1,39 +1,28 @@
 import React, { useState } from 'react';
-import LoginCard from '../../molecules/Cards/Login';
-import Heading from '../../atoms/Heading';
-import styles from './Login.module.css';
 import { useNavigate } from 'react-router-dom';
-import { login } from '../../../services/user';
-import { useAuth } from '../../../contexts/AuthContext';
 import { useSnackbar } from 'notistack';
+import { Box, Container, Typography } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+
+import LoginCard from '../../molecules/Cards/Login';
+import { useAuth } from '../../../contexts/AuthContext';
+import { login } from '../../../services/user';
+import { loginPageStyles } from './styles';
 
 const LoginPage = () => {
   const { enqueueSnackbar } = useSnackbar();
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState('');
   const { login: setUser } = useAuth();
   const navigate = useNavigate();
+  const theme = useTheme();
 
   const handleLoginSubmit = async (data) => {
     const { email, password } = data;
     
     setLoading(true);
-    setError('');
 
-    if (!email && !password) {
+    if (!email || !password) {
       enqueueSnackbar('Email e senha são obrigatórios.', { variant: 'error' });
-      setLoading(false);
-      return;
-    }
-
-    if (!email) {
-      enqueueSnackbar('O email é obrigatório.', { variant: 'error' });
-      setLoading(false);
-      return;
-    }
-
-    if (!password) {
-      enqueueSnackbar('A senha é obrigatória.', { variant: 'error' });
       setLoading(false);
       return;
     }
@@ -43,19 +32,44 @@ const LoginPage = () => {
       setUser(user.data);
       navigate('/dashboard');
     } catch (err) {
-      enqueueSnackbar(err.message, { variant: 'error' });
+      const errorMessage = err.response?.data?.message || err.message || 'Ocorreu um erro. Tente novamente.';
+      enqueueSnackbar(errorMessage, { variant: 'error' });
+    } finally {
+      setLoading(false);
     }
+  };
 
-    setLoading(false);
+  const styles = {
+    container: loginPageStyles.container(theme),
+    welcomeTitle: loginPageStyles.welcomeTitle(theme),
+    welcomeSubtitle: loginPageStyles.welcomeSubtitle(theme),
   };
 
   return (
-    <div className={styles['login-page']}>
-      <div className={styles['welcome-text']}>
-        <Heading text="Bem-vindo(a) à CourseSphere!" level={1} />
-      </div>
+    <Container 
+      component="main" 
+      maxWidth={false} 
+      disableGutters
+      sx={styles.container}
+    >
+      <Box sx={loginPageStyles.welcomeBox}>
+        <Typography 
+          variant="h3" 
+          component="h1" 
+          gutterBottom
+          sx={styles.welcomeTitle}
+        >
+          Bem-vindo(a) à CourseSphere!
+        </Typography>
+        <Typography 
+          variant="body1" 
+          sx={styles.welcomeSubtitle}
+        >
+          A sua plataforma para gerenciar e participar de cursos de forma colaborativa.
+        </Typography>
+      </Box>
       <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
-    </div>
+    </Container>
   );
 };
 

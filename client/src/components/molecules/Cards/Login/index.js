@@ -1,12 +1,13 @@
 import React from 'react';
-import LoginForm from '../../../molecules/Forms/Login';
-import styles from './Login.module.css';
+import { Card } from '@mui/material';
+import LoginForm from '../../Forms/Login';
+import { styles } from './styles';
 
 const LoginCard = ({ onSubmit, loading }) => {
   return (
-    <div className={styles['login-card']}>
+    <Card sx={styles.card}>
       <LoginForm loading={loading} onSubmit={onSubmit} />
-    </div>
+    </Card>
   );
 };
 
