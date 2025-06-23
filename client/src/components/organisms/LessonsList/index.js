@@ -1,7 +1,7 @@
-import React, { useState, useEffect, useMemo, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box, Typography, TextField, Select, MenuItem, FormControl, 
-  InputLabel, CircularProgress, Alert, Pagination, Stack
+  InputLabel, CircularProgress, Alert, Pagination, Stack, Button
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import LessonCard from '../../molecules/Cards/Lesson';
@@ -27,14 +27,13 @@ const LessonsList = ({ courseID }) => {
   useEffect(() => {
     debouncedSetSearch(searchTerm);
   }, [searchTerm, debouncedSetSearch]);
-  
+
   useEffect(() => {
     setCurrentPage(1);
   }, [debouncedSearchTerm, statusFilter]);
 
   useEffect(() => {
     if (!courseID) return;
-
     const fetchLessons = async () => {
       setIsLoading(true);
       const params = {
@@ -54,14 +53,22 @@ const LessonsList = ({ courseID }) => {
         setIsLoading(false);
       }
     };
-    
     fetchLessons();
   }, [courseID, currentPage, debouncedSearchTerm, statusFilter]);
   
   const totalPages = Math.ceil(totalLessons / LESSONS_PER_PAGE);
 
   return (
-    <Box>
+    <Box sx={styles.lessonsSection}>
+      <Box sx={styles.sectionHeader}>
+        <Typography variant="h5" component="h3">
+          Aulas
+        </Typography>
+        <Button variant="contained" size="small">
+          Criar Nova Aula
+        </Button>
+      </Box>
+
       <Stack direction="row" spacing={2} sx={styles.filterBar}>
         <TextField
           label="Buscar pelo título da aula"
@@ -85,7 +92,7 @@ const LessonsList = ({ courseID }) => {
         </FormControl>
       </Stack>
 
-      <Box sx={styles.contentContainer}>
+      <Box sx={{ ...styles.contentContainer, justifyContent: lessons.length > 0 && !isLoading ? 'flex-start' : 'center' }}>
         {isLoading ? (
           <CircularProgress />
         ) : error ? (
