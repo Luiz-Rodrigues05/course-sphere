@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import CourseCard from '../../molecules/Cards/Course';
-import Heading from '../../atoms/Heading';
-import Button from '../../atoms/Button';
-import styles from './CourseList.module.css';
-
 import { getCourses } from '../../../services/course';
 import { useAuth } from '../../../contexts/AuthContext';
+import { Box, Typography, Button, Grid, CircularProgress, Alert } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import CourseCard from '../../molecules/Cards/Course';
+import { getCourseListStyles } from './styles';
 
 const CourseList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
+  const theme = useTheme();
+  const styles = getCourseListStyles(theme);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -19,7 +20,6 @@ const CourseList = () => {
         setLoading(false);
         return;
       }
-
       try {
         setLoading(true);
         const coursesData = await getCourses(user.id);
@@ -31,36 +31,46 @@ const CourseList = () => {
         setLoading(false);
       }
     };
-
     fetchCourses();
   }, [user?.id]);
 
-  if (loading) {
-    return <p>Carregando cursos...</p>;
-  }
-
-  if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
-  }
+  const renderCourses = () => {
+    if (loading) {
+      return <Box sx={styles.feedbackContainer}><CircularProgress /></Box>;
+    }
+    if (error) {
+      return <Alert severity="error">{error}</Alert>;
+    }
+    if (courses.length === 0) {
+      return (
+        <Box sx={styles.feedbackContainer}>
+          <Typography>Nenhum curso encontrado para este usuário.</Typography>
+        </Box>
+      );
+    }
+    return (
+      <Grid container spacing={3}>
+        {courses.map(course => (
+          <Grid item key={course.id} xs={12} sm={6} md={4}>
+            <CourseCard course={course} />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  };
 
   return (
-    <div className={styles.courseListContainer}>
-      <div className={styles.header}>
-        <Heading text="Meus Cursos" level={2} />
-        <Button>Criar Novo Curso</Button>
-      </div>
-      <div className={styles.grid}>
-        {courses.length > 0 ? (
-          courses.map(course => (
-            <CourseCard
-              course={course}
-            />
-          ))
-        ) : (
-          <p>Nenhum curso encontrado para este usuário.</p>
-        )}
-      </div>
-    </div>
+    <Box>
+      <Box sx={styles.header}>
+        <Typography variant="h5" component="h2">
+          Meus Cursos
+        </Typography>
+        <Button variant="contained">
+          Criar Novo Curso
+        </Button>
+      </Box>
+      {renderCourses()}
+    </Box>
   );
 };
 

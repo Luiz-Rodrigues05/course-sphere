@@ -1,35 +1,43 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useAuth } from '../../../contexts/AuthContext';
-import Button from '../../atoms/Button';
-import Heading from '../../atoms/Heading';
-import styles from './Navbar.module.css';
-
+import { Box, Typography, Button, Link } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import { IoSchoolSharp, IoHome, IoLogOutOutline } from 'react-icons/io5';
+import { getNavbarStyles } from './styles';
 
 const Navbar = () => {
   const { logout } = useAuth();
+  const theme = useTheme();
+  const styles = getNavbarStyles(theme);
 
   return (
-    <nav className={styles.navbar}>
-      <Link to="/dashboard" className={styles.logoLink}>
-        <IoSchoolSharp className={styles.logoIcon} />
-        <Heading text="CourseSphere" level={3} />
+    <Box component="nav" sx={styles.navbar}>
+      <Link component={RouterLink} to="/dashboard" sx={styles.logoLink}>
+        <IoSchoolSharp style={styles.logoIcon} />
+        <Typography variant="h6" component="h1" sx={styles.logoText}>
+          CourseSphere
+        </Typography>
       </Link>
 
-      <div className={styles.navLinks}>
-        <Link to="/dashboard">
-          <Button variant="ghost">
-            <IoHome />
-            Home
-          </Button>
-        </Link>
-        <Button variant="ghost" onClick={logout}>
-          <IoLogOutOutline />
+      <Box sx={styles.navLinks}>
+        <Button
+          component={RouterLink}
+          to="/dashboard"
+          color="inherit"
+          startIcon={<IoHome />}
+        >
+          Home
+        </Button>
+        <Button
+          color="inherit"
+          onClick={logout}
+          startIcon={<IoLogOutOutline />}
+        >
           Sair
         </Button>
-      </div>
-    </nav>
+      </Box>
+    </Box>
   );
 };
 

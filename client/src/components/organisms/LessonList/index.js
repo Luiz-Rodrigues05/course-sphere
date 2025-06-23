@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { getLessons } from '../../../services/lesson';
-import Heading from '../../atoms/Heading';
-import Input from '../../atoms/Input';
-import Pagination from '../../molecules/Pagination';
+import {
+  Box, Typography, TextField, Select, MenuItem, FormControl, 
+  InputLabel, CircularProgress, Alert, Pagination, Stack
+} from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import LessonCard from '../../molecules/Cards/Lesson';
-import styles from './LessonList.module.css';
+import { getLessonListStyles } from './styles';
 
 const LESSONS_PER_PAGE = 5;
 
@@ -17,6 +19,9 @@ const LessonList = ({ courseID }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
 
+  const theme = useTheme();
+  const styles = getLessonListStyles(theme);
+
   useEffect(() => {
     if (!courseID) return;
 
@@ -28,7 +33,6 @@ const LessonList = ({ courseID }) => {
         q: searchTerm || undefined,
         status: statusFilter || undefined,
       };
-
       try {
         const response = await getLessons(courseID, params);
         setLessons(response.data);
@@ -40,50 +44,65 @@ const LessonList = ({ courseID }) => {
         setIsLoading(false);
       }
     };
-
     fetchLessons();
   }, [courseID, currentPage, searchTerm, statusFilter]);
+  
+  const totalPages = Math.ceil(totalLessons / LESSONS_PER_PAGE);
 
   return (
-    <div className={styles.lessonsSection}>
-      <Heading text="Aulas" level={2} />
+    <Box sx={styles.lessonsSection}>
+      <Typography variant="h4" component="h2" gutterBottom>
+        Aulas
+      </Typography>
 
-      <div className={styles.filterBar}>
-        <Input
-          placeholder="Buscar pelo título da aula..."
+      <Stack direction="row" spacing={2} sx={styles.filterBar}>
+        <TextField
+          label="Buscar pelo título da aula"
+          variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          fullWidth
         />
-        <select
-          value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
-          className={styles.filterSelect}
-        >
-          <option value="">Todos os Status</option>
-          <option value="published">Publicadas</option>
-          <option value="draft">Rascunho</option>
-        </select>
-      </div>
+        <FormControl sx={{ minWidth: 180 }}>
+          <InputLabel id="status-filter-label">Status</InputLabel>
+          <Select
+            labelId="status-filter-label"
+            label="Status"
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <MenuItem value="">Todos os Status</MenuItem>
+            <MenuItem value="published">Publicadas</MenuItem>
+            <MenuItem value="draft">Rascunho</MenuItem>
+          </Select>
+        </FormControl>
+      </Stack>
 
       {isLoading ? (
-        <p>Carregando aulas...</p>
-        ) : error ? (
-        <p style={{ color: 'red' }}>{error}</p>
-        ) : lessons.length > 0 ? (
-        <div className={styles.gridContainer}>
-            {lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
-        </div>
-        ) : (
-        <p>Nenhuma aula encontrada para os filtros selecionados.</p>
-    )}
+        <Box sx={styles.feedbackContainer}><CircularProgress /></Box>
+      ) : error ? (
+        <Alert severity="error">{error}</Alert>
+      ) : lessons.length > 0 ? (
+        <Box sx={styles.gridContainer}>
+          {lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
+        </Box>
+      ) : (
+        <Box sx={styles.feedbackContainer}>
+          <Typography>Nenhuma aula encontrada para os filtros selecionados.</Typography>
+        </Box>
+      )}
 
-      <Pagination
-        currentPage={currentPage}
-        totalCount={totalLessons}
-        pageSize={LESSONS_PER_PAGE}
-        onPageChange={(page) => setCurrentPage(page)}
-      />
-    </div>
+      {totalPages > 1 && (
+        <Box sx={styles.paginationContainer}>
+          <Pagination
+            count={totalPages}
+            page={currentPage}
+            onChange={(event, page) => setCurrentPage(page)}
+            color="primary"
+          />
+        </Box>
+      )}
+    </Box>
   );
 };
 
