@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../../../contexts/AuthContext";
 import { Box, Typography } from '@mui/material'; // Container foi removido
 import { useTheme } from '@mui/material/styles';
-import CourseList from "../../organisms/CourseList";
+import CourseList from "../../organisms/CoursesList";
 import { getDashboardStyles } from './styles';
 
 const Dashboard = () => {
@@ -11,7 +11,6 @@ const Dashboard = () => {
   const styles = getDashboardStyles(theme);
 
   return (
-    // O <Container> foi removido daqui
     <Box sx={styles.root}>
       <Typography 
         variant="h4" 
