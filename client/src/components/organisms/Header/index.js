@@ -10,7 +10,7 @@ const Header = () => {
 
   return (
     <AppBar 
-      position="static" 
+      position="sticky" 
       sx={styles.appBar} 
       elevation={1}
     >
