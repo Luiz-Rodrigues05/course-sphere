@@ -40,3 +40,39 @@ export const getCourseInstructors = async (courseID, params) => {
     throw new Error(error.message || 'Erro desconhecido.');
   }
 };
+
+export const createCourse = async (courseData) => {
+  try {
+    const response = await request('POST', baseURL, courseData);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao criar o curso.');
+    }
+    throw new Error(error.message || 'Erro desconhecido.');
+  }
+};
+
+export const updateCourse = async (courseID, courseData) => {
+  try {
+    const response = await request('PUT', `${baseURL}/${courseID}`, courseData);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao atualizar o curso.');
+    }
+    throw new Error(error.message || 'Erro desconhecido.');
+  }
+};
+
+export const deleteCourse = async (courseID) => {
+  try {
+    const response = await request('DELETE', `${baseURL}/${courseID}`);
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao deletar o curso.');
+    }
+    throw new Error(error.message || 'Erro desconhecido.');
+  }
+};
