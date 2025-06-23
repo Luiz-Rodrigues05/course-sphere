@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCourse } from '../../../services/course';
-import { Box, CircularProgress, Alert, Grid } from '@mui/material';
+import { Box, CircularProgress, Alert, Stack } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { getCoursePageStyles } from './styles';
 
@@ -56,19 +56,12 @@ const CoursePage = () => {
   }
 
   return (
-    <Box component="main">
-      <Grid container spacing={5}>
-        <Grid item xs={12} md={6}>
-          <CourseInfo course={course} />
-        </Grid>
-        
-        <Grid item xs={12} md={6}>
-          <InstructorsList />
-        </Grid>
-      </Grid>
-      <Grid item xs={12}>
-          <LessonsList courseID={courseID} />
-        </Grid>
+    <Box component="main" sx={styles.mainContent}>
+      <Stack spacing={4}>
+        <CourseInfo course={course} />
+        <InstructorsList />
+        <LessonsList courseID={courseID} />
+      </Stack>
     </Box>
   );
 };

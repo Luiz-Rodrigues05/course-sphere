@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography, Card, CardContent, Button } from '@mui/material';
+import { Box, Typography, IconButton } from '@mui/material';
+import { Settings } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { getCourseInfoStyles } from './styles';
 
@@ -9,26 +10,24 @@ const CourseInfo = ({ course }) => {
 
   return (
     <Box>
-      <Box sx={styles.sectionHeader}>
-        <Typography variant="h5" component="h2">
-          Informações do Curso
+      <Box sx={styles.titleContainer}>
+        <Typography variant="h4" component="h1">
+          {course.name}
         </Typography>
-        <Button variant="outlined" size="small">Editar</Button>
+        
+        <IconButton aria-label="Editar informações do curso" size="small">
+          <Settings sx={{ color: theme.palette.text.primary }}/>
+        </IconButton>
       </Box>
-      <Card>
-        <CardContent>
-          <Typography variant="h6" component="h3" gutterBottom>
-            <strong>Nome:</strong> {course.name}
-          </Typography>
-          <Typography variant="body1" paragraph>
-            <strong>Descrição:</strong> {course.description}
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            <strong>Início:</strong> {new Date(course.start_date).toLocaleDateString()}
-            <strong style={{ marginLeft: '16px' }}>Fim:</strong> {new Date(course.end_date).toLocaleDateString()}
-          </Typography>
-        </CardContent>
-      </Card>
+
+      <Typography variant="body1" component="p" sx={{ mb: 2 }}>
+        <strong>Descrição:</strong> {course.description}
+      </Typography>
+      
+      <Typography variant="body2" color="text.secondary">
+        <strong>Início:</strong> {new Date(course.start_date).toLocaleDateString()}
+        <strong style={{ marginLeft: '16px' }}>Fim:</strong> {new Date(course.end_date).toLocaleDateString()}
+      </Typography>
     </Box>
   );
 };
