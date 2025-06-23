@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo, useCallback } from 'react';
 import {
   Box, Typography, TextField, Select, MenuItem, FormControl, 
   InputLabel, CircularProgress, Alert, Pagination, Stack
@@ -7,10 +7,13 @@ import { useTheme } from '@mui/material/styles';
 import LessonCard from '../../molecules/Cards/Lesson';
 import { getLessonsListStyles } from './styles';
 import { getLessons } from '../../../services/lesson';
+import { debounce } from '../../../services/debounce';
 
 const LESSONS_PER_PAGE = 1;
 
 const LessonsList = ({ courseID }) => {
+  const theme = useTheme();
+  const styles = getLessonsListStyles(theme);
   const [lessons, setLessons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -18,13 +21,16 @@ const LessonsList = ({ courseID }) => {
   const [totalLessons, setTotalLessons] = useState(0);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
-
-  const theme = useTheme();
-  const styles = getLessonsListStyles(theme);
+  const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
+  const debouncedSetSearch = useCallback(debounce(setDebouncedSearchTerm, 500), []);
 
   useEffect(() => {
+    debouncedSetSearch(searchTerm);
+  }, [searchTerm, debouncedSetSearch]);
+  
+  useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, statusFilter]);
+  }, [debouncedSearchTerm, statusFilter]);
 
   useEffect(() => {
     if (!courseID) return;
@@ -34,7 +40,7 @@ const LessonsList = ({ courseID }) => {
       const params = {
         _page: currentPage,
         _limit: LESSONS_PER_PAGE,
-        q: searchTerm || undefined,
+        q: debouncedSearchTerm || undefined,
         status: statusFilter || undefined,
       };
       try {
@@ -50,7 +56,7 @@ const LessonsList = ({ courseID }) => {
     };
     
     fetchLessons();
-  }, [courseID, currentPage, searchTerm, statusFilter]);
+  }, [courseID, currentPage, debouncedSearchTerm, statusFilter]);
   
   const totalPages = Math.ceil(totalLessons / LESSONS_PER_PAGE);
 
@@ -93,7 +99,6 @@ const LessonsList = ({ courseID }) => {
         )}
       </Box>
 
-      {/* CORREÇÃO: Exibe a paginação se houver algum resultado */}
       {totalLessons > 0 && (
         <Box sx={styles.paginationContainer}>
           <Pagination
