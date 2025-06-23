@@ -59,7 +59,7 @@ const CoursePage = () => {
     <Box component="main" sx={styles.mainContent}>
       <Stack spacing={4}>
         <CourseInfo course={course} />
-        <InstructorsList />
+        <InstructorsList courseID={courseID} />
         <LessonsList courseID={courseID} />
       </Stack>
     </Box>
