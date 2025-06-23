@@ -1,4 +1,4 @@
-export const getCourseListStyles = (theme) => ({
+export const getCoursesListStyles = (theme) => ({
     header: {
       display: 'flex',
       justifyContent: 'space-between',

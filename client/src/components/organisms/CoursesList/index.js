@@ -4,15 +4,15 @@ import { useAuth } from '../../../contexts/AuthContext';
 import { Box, Typography, Button, Grid, CircularProgress, Alert } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import CourseCard from '../../molecules/Cards/Course';
-import { getCourseListStyles } from './styles';
+import { getCoursesListStyles } from './styles';
 
-const CourseList = () => {
+const CoursesList = () => {
   const [courses, setCourses] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const { user } = useAuth();
   const theme = useTheme();
-  const styles = getCourseListStyles(theme);
+  const styles = getCoursesListStyles(theme);
 
   useEffect(() => {
     const fetchCourses = async () => {
@@ -74,4 +74,4 @@ const CourseList = () => {
   );
 };
 
-export default CourseList;
+export default CoursesList;

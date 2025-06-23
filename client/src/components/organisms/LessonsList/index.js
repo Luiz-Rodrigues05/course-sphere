@@ -6,11 +6,11 @@ import {
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import LessonCard from '../../molecules/Cards/Lesson';
-import { getLessonListStyles } from './styles';
+import { getLessonsListStyles } from './styles';
 
-const LESSONS_PER_PAGE = 5;
+const LESSONS_PER_PAGE = 1;
 
-const LessonList = ({ courseID }) => {
+const LessonsList = ({ courseID }) => {
   const [lessons, setLessons] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -20,7 +20,7 @@ const LessonList = ({ courseID }) => {
   const [statusFilter, setStatusFilter] = useState('');
 
   const theme = useTheme();
-  const styles = getLessonListStyles(theme);
+  const styles = getLessonsListStyles(theme);
 
   useEffect(() => {
     if (!courseID) return;
@@ -51,17 +51,16 @@ const LessonList = ({ courseID }) => {
 
   return (
     <Box sx={styles.lessonsSection}>
-      <Typography variant="h4" component="h2" gutterBottom>
+      <Typography variant="h5" component="h3" gutterBottom>
         Aulas
       </Typography>
 
-      <Stack direction="row" spacing={2} sx={styles.filterBar}>
+      <Stack direction="row" spacing={2}>
         <TextField
           label="Buscar pelo título da aula"
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          fullWidth
         />
         <FormControl sx={{ minWidth: 180 }}>
           <InputLabel id="status-filter-label">Status</InputLabel>
@@ -106,4 +105,4 @@ const LessonList = ({ courseID }) => {
   );
 };
 
-export default LessonList;
+export default LessonsList;
