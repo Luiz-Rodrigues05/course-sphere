@@ -65,6 +65,18 @@ export const updateCourse = async (courseID, courseData) => {
   }
 };
 
+export const updateInstructors = async (courseID, courseData) => {
+  try {
+    const response = await request('PATCH', `${baseURL}/${courseID}`, {data: courseData});
+    return response;
+  } catch (error) {
+    if (error.response) {
+      throw new Error(error.response.data?.message || 'Erro ao atualizar o curso.');
+    }
+    throw new Error(error.message || 'Erro desconhecido.');
+  }
+};
+
 export const deleteCourse = async (courseID) => {
   try {
     const response = await request('DELETE', `${baseURL}/${courseID}`);

@@ -28,6 +28,31 @@ server.post('/login', (req, res) => {
   router.db.get('sessions').push(session).write();
   res.status(200).json(session);
 });
+
+server.post('/users', (req, res) => {
+  const userData = req.body;
+
+  if (!userData.email || !userData.name || !userData.password) {
+    return res.status(400).json({ message: 'Dados insuficientes para criar o usuário.' });
+  }
+
+  const existingUser = router.db.get('users').find({ email: userData.email }).value();
+  if (existingUser) {
+    return res.status(409).json({ message: 'Email já cadastrado.' });
+  }
+
+  const users = router.db.get('users');
+  const newId = users.value().length > 0 ? Math.max(...users.map(u => u.id).value()) + 1 : 1;
+  
+  const newUser = {
+    id: newId,
+    ...userData
+  };
+  
+  users.push(newUser).write();
+  
+  res.status(201).json(newUser);
+});
   
 // Endpoint para buscar os cursos de um usuário
 server.get('/user/:userID/courses', (req, res) => {
@@ -98,6 +123,25 @@ server.put('/courses/:id', (req, res) => {
         end_date: updatedData.end_date,
         // Garante que outros campos como instructors e creator_id não sejam sobrescritos se não vierem na request
     }).write();
+
+    res.status(200).json(result);
+});
+
+server.patch('/courses/:id', (req, res) => {
+    const courseId = parseInt(req.params.id, 10);
+    const updatedData = req.body;
+
+    if (isNaN(courseId)) {
+        return res.status(400).json({ message: 'O ID do curso deve ser um número.' });
+    }
+
+    const course = router.db.get('courses').find({ id: courseId });
+
+    if (!course.value()) {
+        return res.status(404).json({ message: 'Curso não encontrado.' });
+    }
+
+    const result = course.assign(updatedData).write();
 
     res.status(200).json(result);
 });

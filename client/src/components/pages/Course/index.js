@@ -91,7 +91,12 @@ const CoursePage = () => {
     <Box component="main" sx={styles.mainContent}>
       <Stack spacing={4}>
         <CourseInfo course={course} onEdit={handleOpenModal} canEdit={canEdit} />
-        <InstructorsList courseID={courseID} creatorId={course.creator_id}/>
+        <InstructorsList
+          course={course}
+          canEdit={canEdit}
+          onUpdate={fetchCourseDetails}
+          showNotification={showNotification}
+        />
         <LessonsList courseID={courseID} canEdit={canEdit} />
       </Stack>
 
