@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Box, Typography, Card, CardContent, Button, 
-  CircularProgress, Alert, Pagination, Grid
+  Box, Typography, Button, CircularProgress, 
+  Alert, Pagination, Grid
 } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { getCourseInstructors } from '../../../services/course';
 import { getInstructorListStyles } from './styles';
-import InstructorCard from '../../molecules/Cards/Instructor'; // Importe o novo card
+import InstructorCard from '../../molecules/Cards/Instructor';
 
-const INSTRUCTORS_PER_PAGE = 3;
+const INSTRUCTORS_PER_PAGE = 1;
 
 const InstructorsList = ({ courseID }) => {
   const [instructors, setInstructors] = useState([]);
@@ -25,10 +25,7 @@ const InstructorsList = ({ courseID }) => {
 
     const fetchInstructors = async () => {
       setLoading(true);
-      const params = {
-        _page: currentPage,
-        _limit: INSTRUCTORS_PER_PAGE,
-      };
+      const params = { _page: currentPage, _limit: INSTRUCTORS_PER_PAGE };
       try {
         const response = await getCourseInstructors(courseID, params);
         const instructorsWithImages = response.data.map(instructor => ({
@@ -44,15 +41,14 @@ const InstructorsList = ({ courseID }) => {
         setLoading(false);
       }
     };
-
     fetchInstructors();
   }, [courseID, currentPage]);
-
+  
   const totalPages = Math.ceil(totalInstructors / INSTRUCTORS_PER_PAGE);
 
   const renderContent = () => {
     if (loading) {
-      return <CircularProgress sx={{ display: 'block', margin: 'auto' }} />;
+      return <CircularProgress />;
     }
     if (error) {
       return <Alert severity="error">{error}</Alert>;
@@ -61,9 +57,9 @@ const InstructorsList = ({ courseID }) => {
       return <Typography color="text.secondary">(Nenhum instrutor neste curso)</Typography>;
     }
     return (
-      <Grid container spacing={2} sx={styles.instructorsGrid}>
+      <Grid container spacing={2}>
         {instructors.map((instructor) => (
-          <Grid item key={instructor.id} xs={12} sm={4}>
+          <Grid item key={instructor.id} xs={12} sm={6} md={4}>
             <InstructorCard instructor={instructor} />
           </Grid>
         ))}
@@ -79,8 +75,14 @@ const InstructorsList = ({ courseID }) => {
         </Typography>
         <Button variant="outlined" size="small">Gerenciar</Button>
       </Box>
-      {renderContent()}
-      {totalPages > 1 && (
+      <Box sx={{
+        ...styles.contentWrapper,
+        justifyContent: instructors.length > 0 && !loading ? 'flex-start' : 'center',
+      }}>
+        {renderContent()}
+      </Box>
+
+      {totalPages > 0 && (
         <Box sx={styles.paginationContainer}>
           <Pagination
             count={totalPages}

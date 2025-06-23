@@ -29,9 +29,9 @@ export const getCourse = async (courseID) => {
   }
 };
 
-export const getCourseInstructors = async (courseID) => {
+export const getCourseInstructors = async (courseID, params) => {
   try {
-    const response = await request('GET', `${baseURL}/${courseID}/instructors`);
+    const response = await request('GET', `${baseURL}/${courseID}/instructors`, { params });
     return response;
   } catch (error) {
     if (error.response) {
