@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { getLessons } from '../../../services/lesson';
 import {
   Box, Typography, TextField, Select, MenuItem, FormControl, 
   InputLabel, CircularProgress, Alert, Pagination, Stack
@@ -7,6 +6,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 import LessonCard from '../../molecules/Cards/Lesson';
 import { getLessonsListStyles } from './styles';
+import { getLessons } from '../../../services/lesson';
 
 const LESSONS_PER_PAGE = 1;
 
@@ -21,6 +21,10 @@ const LessonsList = ({ courseID }) => {
 
   const theme = useTheme();
   const styles = getLessonsListStyles(theme);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, statusFilter]);
 
   useEffect(() => {
     if (!courseID) return;
@@ -44,23 +48,21 @@ const LessonsList = ({ courseID }) => {
         setIsLoading(false);
       }
     };
+    
     fetchLessons();
   }, [courseID, currentPage, searchTerm, statusFilter]);
   
   const totalPages = Math.ceil(totalLessons / LESSONS_PER_PAGE);
 
   return (
-    <Box sx={styles.lessonsSection}>
-      <Typography variant="h5" component="h3" gutterBottom>
-        Aulas
-      </Typography>
-
-      <Stack direction="row" spacing={2}>
+    <Box>
+      <Stack direction="row" spacing={2} sx={styles.filterBar}>
         <TextField
           label="Buscar pelo título da aula"
           variant="outlined"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
+          sx={{ flexGrow: 1 }}
         />
         <FormControl sx={{ minWidth: 180 }}>
           <InputLabel id="status-filter-label">Status</InputLabel>
@@ -77,21 +79,22 @@ const LessonsList = ({ courseID }) => {
         </FormControl>
       </Stack>
 
-      {isLoading ? (
-        <Box sx={styles.feedbackContainer}><CircularProgress /></Box>
-      ) : error ? (
-        <Alert severity="error">{error}</Alert>
-      ) : lessons.length > 0 ? (
-        <Box sx={styles.gridContainer}>
-          {lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
-        </Box>
-      ) : (
-        <Box sx={styles.feedbackContainer}>
+      <Box sx={styles.contentContainer}>
+        {isLoading ? (
+          <CircularProgress />
+        ) : error ? (
+          <Alert severity="error" sx={{ width: '100%' }}>{error}</Alert>
+        ) : lessons.length > 0 ? (
+          <Box sx={styles.gridContainer}>
+            {lessons.map(lesson => <LessonCard key={lesson.id} lesson={lesson} />)}
+          </Box>
+        ) : (
           <Typography>Nenhuma aula encontrada para os filtros selecionados.</Typography>
-        </Box>
-      )}
+        )}
+      </Box>
 
-      {totalPages > 1 && (
+      {/* CORREÇÃO: Exibe a paginação se houver algum resultado */}
+      {totalLessons > 0 && (
         <Box sx={styles.paginationContainer}>
           <Pagination
             count={totalPages}

@@ -4,12 +4,19 @@ export const getLessonsListStyles = (theme) => ({
       marginTop: theme.spacing(4),
       paddingTop: theme.spacing(2),
     },
+    contentContainer: {
+      minHeight: '250px',
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
     gridContainer: {
       display: 'flex',
       flexDirection: 'row',
       overflowX: 'auto',
       gap: theme.spacing(3),
       padding: theme.spacing(2, 0, 1.5, 0),
+      width: '100%',
       '&::-webkit-scrollbar': {
         height: '8px',
       },
@@ -33,7 +40,7 @@ export const getLessonsListStyles = (theme) => ({
     },
     paginationContainer: {
       display: 'flex',
-      justifyContent: 'center',
+      justifyContent: 'space-between',
       marginTop: theme.spacing(3),
     },
   });
