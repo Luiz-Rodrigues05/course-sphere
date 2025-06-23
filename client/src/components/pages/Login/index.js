@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { Box, Container, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material'; // Container não é mais necessário aqui
 import { useTheme } from '@mui/material/styles';
 
 import LoginCard from '../../molecules/Cards/Login';
 import { useAuth } from '../../../contexts/AuthContext';
 import { login } from '../../../services/user';
-import { loginPageStyles } from './styles';
+import { getLoginPageStyles } from './styles';
 
 const LoginPage = () => {
   const { enqueueSnackbar } = useSnackbar();
@@ -15,6 +15,7 @@ const LoginPage = () => {
   const { login: setUser } = useAuth();
   const navigate = useNavigate();
   const theme = useTheme();
+  const styles = getLoginPageStyles(theme);
 
   const handleLoginSubmit = async (data) => {
     const { email, password } = data;
@@ -39,20 +40,10 @@ const LoginPage = () => {
     }
   };
 
-  const styles = {
-    container: loginPageStyles.container(theme),
-    welcomeTitle: loginPageStyles.welcomeTitle(theme),
-    welcomeSubtitle: loginPageStyles.welcomeSubtitle(theme),
-  };
-
   return (
-    <Container 
-      component="main" 
-      maxWidth={false} 
-      disableGutters
-      sx={styles.container}
-    >
-      <Box sx={loginPageStyles.welcomeBox}>
+    <Box component="main" sx={styles.container}>
+
+      <Box sx={styles.welcomeBox}>
         <Typography 
           variant="h3" 
           component="h1" 
@@ -68,8 +59,11 @@ const LoginPage = () => {
           A sua plataforma para gerenciar e participar de cursos de forma colaborativa.
         </Typography>
       </Box>
-      <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
-    </Container>
+
+      <Box sx={styles.cardBox}>
+        <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
+      </Box>
+    </Box>
   );
 };
 

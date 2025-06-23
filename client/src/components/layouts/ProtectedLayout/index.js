@@ -1,16 +1,24 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
+import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
 import Header from '../../organisms/Header';
-import styles from './ProtectedLayout.module.css';
+import { getProtectedLayoutStyles } from './styles';
 
 const ProtectedLayout = () => {
+  const theme = useTheme();
+  const styles = getProtectedLayoutStyles(theme);
+
   return (
-    <div className={styles.layoutContainer}>
+    <Box sx={styles.layoutContainer}>
       <Header />
-      <main className={styles.mainContent}>
+      <Box 
+        component="main" 
+        sx={styles.mainContent}
+      >
         <Outlet />
-      </main>
-    </div>
+      </Box>
+    </Box>
   );
 };
 

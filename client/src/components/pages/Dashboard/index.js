@@ -1,18 +1,27 @@
 import React from "react";
 import { useAuth } from "../../../contexts/AuthContext";
-import Header from "../../organisms/Header";
-import Heading from "../../atoms/Heading";
+import { Box, Typography } from '@mui/material'; // Container foi removido
+import { useTheme } from '@mui/material/styles';
 import CourseList from "../../organisms/CourseList";
-import styles from './Dashboard.module.css';
+import { getDashboardStyles } from './styles';
 
 const Dashboard = () => {
   const { user } = useAuth();
+  const theme = useTheme();
+  const styles = getDashboardStyles(theme);
 
   return (
-    <>
-      <Heading text={"Bem-vindo(a), " + user.name + "!"} level={1} />
+    // O <Container> foi removido daqui
+    <Box sx={styles.root}>
+      <Typography 
+        variant="h4" 
+        component="h1"
+        sx={styles.welcomeMessage}
+      >
+        Bem-vindo(a), {user?.name}!
+      </Typography>
       <CourseList />
-    </>
+    </Box>
   );
 };
 
