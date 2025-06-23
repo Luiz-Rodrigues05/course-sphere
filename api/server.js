@@ -54,13 +54,6 @@ server.get('/user/:userID/courses', (req, res) => {
   res.status(200).json(courses);
 });
 
-// Usar o roteador do json-server
-server.use(router)
-
-server.listen(5000, () => {
-  console.log('Servidor rodando em http://localhost:5000')
-})
-
 // Endpoint para buscar um curso
 server.get('/course/:courseID', (req, res) => {
   const { courseID } = req.params;
@@ -89,24 +82,22 @@ server.get('/courses/:courseID/lessons', (req, res) => {
   const { courseID } = req.params;
   const courseId = parseInt(courseID, 10);
 
-  // 1. Validar se o curso existe no banco de dados
-  const course = db.courses.find(c => c.id === courseId);
+  // 1. Validar se o curso existe
+  const course = router.db.get('courses').find({ id: courseId }).value();
   if (!course) {
     return res.status(404).json({ message: 'Curso não encontrado.' });
   }
 
-  // 2. Capturar parâmetros da query para busca, filtro e paginação
-  //    - 'q' para busca textual no título (search Query)
-  //    - 'status' para filtrar por status ('published' ou 'draft')
-  //    - '_page' e '_limit' para paginação (com valores padrão)
+  // 2. Capturar parâmetros da query
   const { q, status, _page = 1, _limit = 10 } = req.query;
   const page = parseInt(_page, 10);
   const limit = parseInt(_limit, 10);
 
   // 3. Iniciar com todas as aulas que pertencem ao curso
-  let lessons = db.lessons.filter(lesson => lesson.courseId === courseId);
+  // CORREÇÃO: Usando a propriedade correta 'course_id' do db.json
+  let lessons = router.db.get('lessons').filter({ course_id: courseId }).value();
 
-  // 4. Aplicar o filtro de busca textual (parâmetro 'q')
+  // 4. Aplicar o filtro de busca textual
   if (q) {
     const searchTerm = q.toLowerCase();
     lessons = lessons.filter(lesson => 
@@ -114,22 +105,70 @@ server.get('/courses/:courseID/lessons', (req, res) => {
     );
   }
 
-  // 5. Aplicar o filtro por status (parâmetro 'status')
+  // 5. Aplicar o filtro por status
   if (status) {
     lessons = lessons.filter(lesson => lesson.status === status);
   }
 
   // 6. Aplicar a paginação
-  const totalCount = lessons.length; // Total de itens *após* os filtros
+  const totalCount = lessons.length;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const paginatedLessons = lessons.slice(startIndex, endIndex);
 
-  // 7. Enviar o 'X-Total-Count' no cabeçalho da resposta.
-  //    Isso é crucial para o frontend saber o total de páginas.
+  // 7. Enviar o cabeçalho 'X-Total-Count'
   res.setHeader('X-Total-Count', totalCount);
-  res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count'); // Permite que o navegador acesse o header
+  res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
 
-  // 8. Retornar as aulas paginadas e filtradas
+  // 8. Retornar as aulas paginadas
   res.status(200).json(paginatedLessons);
 });
+
+server.get('/courses/:courseID/instructors', (req, res) => {
+  const { courseID } = req.params;
+  const courseId = parseInt(courseID, 10);
+
+  // 1. Validar se o curso existe
+  const course = router.db.get('courses').find({ id: courseId }).value();
+  if (!course) {
+    return res.status(404).json({ message: 'Curso não encontrado.' });
+  }
+
+  // 2. Obter os IDs dos instrutores
+  // CORREÇÃO: Acessando a propriedade correta 'instructors' do db.json
+  const instructorIds = course.instructors || [];
+
+  // 3. Buscar os objetos de usuário completos
+  const instructors = router.db.get('users').filter(user => instructorIds.includes(user.id)).value();
+
+  // 4. Capturar parâmetros de paginação
+  const { _page = 1, _limit = 5 } = req.query;
+  const page = parseInt(_page, 10);
+  const limit = parseInt(_limit, 10);
+
+  // 5. Aplicar a paginação
+  const totalCount = instructors.length;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const paginatedInstructors = instructors.slice(startIndex, endIndex);
+
+  // 6. Mapear para retornar apenas os campos necessários (id e name)
+  const result = paginatedInstructors.map(instructor => ({
+    id: instructor.id,
+    name: instructor.name,
+  }));
+
+  // 7. Enviar o cabeçalho 'X-Total-Count'
+  res.setHeader('X-Total-Count', totalCount);
+  res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
+
+  // 8. Retornar os instrutores paginados
+  res.status(200).json(result);
+});
+
+// Usar o roteador do json-server
+server.use(router)
+
+server.listen(5000, () => {
+  console.log('Servidor rodando em http://localhost:5000')
+})
