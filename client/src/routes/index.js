@@ -4,7 +4,7 @@ import { useAuth } from '../contexts/AuthContext';
 
 import Login from '../components/pages/Login';
 import Dashboard from '../components/pages/Dashboard';
-import CourseDetails from '../components/pages/CourseDetails';
+import CourseDetails from '../components/pages/Course';
 import ProtectedLayout from '../components/layouts/ProtectedLayout';
 
 const AuthGuard = () => {
