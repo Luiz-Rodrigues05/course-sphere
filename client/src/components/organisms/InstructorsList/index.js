@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom';
 
 const INSTRUCTORS_PER_PAGE = 1;
 
-const InstructorsList = ({ course, canEdit, onUpdate, showNotification }) => {
+const InstructorsList = ({ course, onUpdate, showNotification }) => {
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -76,7 +76,7 @@ const InstructorsList = ({ course, canEdit, onUpdate, showNotification }) => {
         <Typography variant="h5" component="h2">
           Instrutores
         </Typography>
-        {canEdit && (
+        {course.can_edit && (
           <Button variant="outlined" size="small" onClick={() => navigate(`/courses/${course.id}/instructors/edit`)}>
             Gerenciar
           </Button>

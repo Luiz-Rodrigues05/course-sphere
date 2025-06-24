@@ -38,11 +38,14 @@ const LessonCard = ({ lesson }) => {
           sx={styles.status}
         />
       </CardContent>
-      <CardActions sx={styles.actions}>
-        <IconButton aria-label="edit lesson" size="small" onClick={handleEdit}>
-          <EditIcon fontSize="small" />
-        </IconButton>
-      </CardActions>
+
+      { lesson.can_edit && (
+        <CardActions sx={styles.actions}>
+          <IconButton aria-label="edit lesson" size="small" onClick={handleEdit}>
+            <EditIcon fontSize="small" />
+          </IconButton>
+        </CardActions>
+      )}
     </Card>
   );
 };

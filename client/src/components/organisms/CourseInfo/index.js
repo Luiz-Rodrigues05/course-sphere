@@ -5,7 +5,7 @@ import { useTheme } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import { getCourseInfoStyles } from './styles';
 
-const CourseInfo = ({ course, canEdit }) => {
+const CourseInfo = ({ course }) => {
   const theme = useTheme();
   const styles = getCourseInfoStyles(theme);
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const CourseInfo = ({ course, canEdit }) => {
           {course.name}
         </Typography>
         
-        {canEdit && (
+        {course.can_edit && (
           <IconButton 
             aria-label="Editar informações do curso" 
             size="small"

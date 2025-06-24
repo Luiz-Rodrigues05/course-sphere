@@ -27,6 +27,7 @@ const AppRoutes = () => {
 
         {/* Rota para erros de permissão (usuário logado, mas sem acesso a um recurso específico) */}
         <Route path="/forbidden" element={<Forbidden />} />
+        <Route path="/not-found" element={<NotFound />} />
 
         {/* Rotas protegidas, agora dentro do ProtectedLayout */}
         <Route element={<ProtectedLayout />}>

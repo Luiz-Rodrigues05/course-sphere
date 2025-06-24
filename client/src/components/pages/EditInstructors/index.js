@@ -27,6 +27,10 @@ const EditInstructorsPage = () => {
     setLoading(true);
     try {
       const courseResponse = await getCourse(courseID);
+       if (courseResponse.data.can_edit === false) {
+        navigate('/forbidden');
+        return; 
+      }
       setCourse(courseResponse.data);
 
       const instructorsResponse = await getCourseInstructors(courseID);

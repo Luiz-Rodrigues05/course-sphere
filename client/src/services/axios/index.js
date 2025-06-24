@@ -53,7 +53,7 @@ const request = async (method, url, config = {}) => {
 
       // Status 404: Not Found (Não Encontrado)
       if (status === 404) {
-        window.location.href = '/unauthorized';
+        window.location.href = '/not-found';
       }
 
       // Status 401: Unauthorized (Não Autenticado)
