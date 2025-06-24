@@ -13,7 +13,7 @@ export const getLessonsListStyles = (theme) => ({
     paddingTop: theme.spacing(2),
   },
   contentContainer: {
-    minHeight: '250px',
+    minHeight: '300px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
