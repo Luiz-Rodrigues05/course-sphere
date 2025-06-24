@@ -1,4 +1,5 @@
 import React, { createContext, useState, useContext, useMemo } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthContext = createContext();
 
@@ -17,6 +18,7 @@ const getInitialUser = () => {
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(getInitialUser());
+  const navigate = useNavigate();
 
   const login = (userData) => {
     localStorage.setItem("user", JSON.stringify(userData));
@@ -26,13 +28,14 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("user");
     setUser(null);
+    navigate('/login');
   };
   
   const memoizedValue = useMemo(() => ({
     user,
     login,
     logout
-  }), [user]);
+  }), [user, navigate]);
 
   return (
     <AuthContext.Provider value={memoizedValue}>
