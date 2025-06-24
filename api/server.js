@@ -64,8 +64,23 @@ server.get('/user/:userID/courses', (req, res) => {
     return res.status(404).json({ message: 'Usuário não encontrado' });
   }
 
-  const courses = router.db.get('courses').filter({ creator_id: id }).value();
-  res.status(200).json(courses);
+  // Pega todos os cursos para filtrar na aplicação
+  const allCourses = router.db.get('courses').value();
+
+  // Filtra os cursos com a nova lógica
+  const userCourses = allCourses.filter(course => {
+    // Condição 1: O usuário é o criador do curso
+    const isCreator = course.creator_id === id;
+
+    // Condição 2: O usuário está incluído no array de instrutores
+    // (inclui uma verificação para garantir que o array 'instructors' exista)
+    const isInstructor = course.instructors && course.instructors.includes(id);
+
+    // Retorna true se qualquer uma das condições for atendida
+    return isCreator || isInstructor;
+  });
+
+  res.status(200).json(userCourses);
 });
 
 server.post('/courses', (req, res) => {
@@ -149,37 +164,77 @@ server.delete('/courses/:id', (req, res) => {
     res.status(200).json({ message: 'Curso e aulas associadas deletados com sucesso.' });
 });
 
-server.get('/course/:courseID', (req, res) => {
+server.get('/courses/:courseID', (req, res) => {
   const { courseID } = req.params;
+  const userID = parseInt(req.headers.authorization, 10);
   const id = parseInt(courseID, 10);
 
   if (isNaN(id)) {
     return res.status(400).json({ message: 'O ID do curso deve ser um número.' });
   }
 
-  const course = router.db.get('courses').find({ id: id }).value();
+  const course = router.db.get('courses').find({ id: id }).cloneDeep().value();
 
   if (!course) {
     return res.status(404).json({ message: 'Curso não encontrado.' });
   }
 
+  if (!userID || isNaN(userID)) {
+    return res.status(401).json({ message: 'ID do usuário inválido ou não fornecido.' });
+  }
+
+  // --- LÓGICA DE PERMISSÃO DE ACESSO ---
+  const isCreator = userID === course.creator_id;
+  // Garante que course.instructors existe antes de chamar .includes()
+  const isInstructor = course.instructors && course.instructors.includes(userID);
+
+  // Se o usuário não é nem criador nem instrutor, nega o acesso.
+  if (!isCreator && !isInstructor) {
+    return res.status(403).json({ message: 'Acesso negado. Você não tem permissão para ver este curso.' });
+  }
+  // --- FIM DA LÓGICA DE PERMISSÃO ---
+
+  // Se o usuário tem acesso, determina a permissão de edição.
+  // Apenas o criador pode editar os detalhes do curso.
+  course.can_edit = isCreator;
+
+  // Retorna o objeto do curso já com o campo 'can_edit' embutido
   res.status(200).json(course);
 });
 
 server.get('/courses/:courseID/lessons', (req, res) => {
   const { courseID } = req.params;
   const courseId = parseInt(courseID, 10);
+  const userID = parseInt(req.headers.authorization, 10);
+
+  // 1. Validações iniciais
+  if (isNaN(courseId)) {
+    return res.status(400).json({ message: 'O ID do curso deve ser um número.' });
+  }
 
   const course = router.db.get('courses').find({ id: courseId }).value();
   if (!course) {
     return res.status(404).json({ message: 'Curso não encontrado.' });
   }
 
+  if (!userID || isNaN(userID)) {
+    return res.status(401).json({ message: 'ID do usuário inválido ou não fornecido.' });
+  }
+
+  // 2. Lógica de Acesso (Forbidden)
+  const isCourseCreator = userID === course.creator_id;
+  const isCourseInstructor = course.instructors && course.instructors.includes(userID);
+
+  if (!isCourseCreator && !isCourseInstructor) {
+    return res.status(403).json({ message: 'Acesso negado. Você não tem permissão para ver as aulas deste curso.' });
+  }
+
+  // 3. Busca e filtragem das aulas (lógica existente)
   const { q, status, _page = 1, _limit = 10 } = req.query;
   const page = parseInt(_page, 10);
   const limit = parseInt(_limit, 10);
 
-  let lessons = router.db.get('lessons').filter({ course_id: courseId }).value();
+  let lessons = router.db.get('lessons').filter({ course_id: courseId }).cloneDeep().value();
 
   if (q) {
     const searchTerm = q.toLowerCase();
@@ -192,10 +247,21 @@ server.get('/courses/:courseID/lessons', (req, res) => {
     lessons = lessons.filter(lesson => lesson.status === status);
   }
 
-  const totalCount = lessons.length;
+  // 4. Adiciona o campo 'can_edit' a cada aula
+  const enrichedLessons = lessons.map(lesson => {
+    // O usuário pode editar a aula se:
+    // a) Ele for o criador do CURSO.
+    // b) Ele for o criador da AULA.
+    const isLessonCreator = userID === lesson.creator_id;
+    lesson.can_edit = isCourseCreator || isLessonCreator;
+    return lesson;
+  });
+
+  // 5. Paginação da lista enriquecida
+  const totalCount = enrichedLessons.length;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const paginatedLessons = lessons.slice(startIndex, endIndex);
+  const paginatedLessons = enrichedLessons.slice(startIndex, endIndex);
 
   res.setHeader('X-Total-Count', totalCount);
   res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
@@ -240,8 +306,15 @@ server.post('/lessons', (req, res) => {
 // GET /lessons/:id - Buscar uma aula específica
 server.get('/lessons/:id', (req, res) => {
   const lessonId = parseInt(req.params.id, 10);
+  const userID = parseInt(req.headers.authorization, 10);
+
+  // 1. Validações iniciais
   if (isNaN(lessonId)) {
     return res.status(400).json({ message: 'O ID da aula deve ser um número.' });
+  }
+
+  if (!userID || isNaN(userID)) {
+    return res.status(401).json({ message: 'ID do usuário inválido ou não fornecido.' });
   }
 
   const lesson = router.db.get('lessons').find({ id: lessonId }).value();
@@ -249,6 +322,27 @@ server.get('/lessons/:id', (req, res) => {
     return res.status(404).json({ message: 'Aula não encontrada.' });
   }
 
+  // 2. Busca o curso para verificar as permissões
+  const course = router.db.get('courses').find({ id: lesson.course_id }).value();
+  if (!course) {
+    return res.status(404).json({ message: 'Curso associado à aula não foi encontrado.' });
+  }
+
+  // 3. Verifica se o usuário tem pelo menos UMA das permissões necessárias
+  const isCourseCreator = userID === course.creator_id;
+  const isCourseInstructor = course.instructors && course.instructors.includes(userID);
+  const isLessonCreator = userID === lesson.creator_id;
+
+  const hasPermission = isCourseCreator || (isCourseInstructor && isLessonCreator);
+
+  console.log(isCourseCreator, isCourseInstructor, isLessonCreator, hasPermission);
+
+  // Se não tiver nenhuma permissão, retorna 403 Forbidden
+  if (!hasPermission) {
+    return res.status(403).json({ message: 'Acesso negado. Você não tem permissão para ver esta aula.' });
+  }
+  
+  // Se passou na verificação, retorna a aula sem modificações.
   res.status(200).json(lesson);
 });
 
@@ -289,8 +383,6 @@ server.delete('/lessons/:id', (req, res) => {
   res.status(200).json({ message: 'Aula deletada com sucesso.' });
 });
 
-// ### FIM DAS NOVAS ROTAS DE AULAS ###
-
 
 server.get('/courses/:courseID/instructors', (req, res) => {
   const { courseID } = req.params;
@@ -325,7 +417,11 @@ server.get('/courses/:courseID/instructors', (req, res) => {
 });
 
 // Usar o roteador do json-server
-server.use(router)
+server.use((req, res, next) => {
+  // Permite que o navegador envie o cabeçalho 'Authorization'
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
+  next();
+});
 
 server.listen(5000, () => {
   console.log('Servidor rodando em http://localhost:5000')

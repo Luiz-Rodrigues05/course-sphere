@@ -26,7 +26,7 @@ const AppRoutes = () => {
         <Route path="/unauthorized" element={<Navigate to="/dashboard" replace />} />
 
         {/* Rota para erros de permissão (usuário logado, mas sem acesso a um recurso específico) */}
-        {/* <Route path="/forbidden" element={<Forbidden />} /> */}
+        <Route path="/forbidden" element={<Forbidden />} />
 
         {/* Rotas protegidas, agora dentro do ProtectedLayout */}
         <Route element={<ProtectedLayout />}>
