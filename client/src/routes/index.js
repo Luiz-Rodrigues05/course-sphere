@@ -7,6 +7,7 @@ import Dashboard from '../components/pages/Dashboard';
 import CoursePage from '../components/pages/Course';
 import CreateCoursePage from '../components/pages/CreateCourse';
 import EditCoursePage from '../components/pages/EditCourse';
+import EditInstructorsPage from '../components/pages/EditInstructors';
 import ProtectedLayout from '../components/layouts/ProtectedLayout';
 
 const AuthGuard = () => {
@@ -24,6 +25,7 @@ const AppRoutes = () => {
         <Route path="/courses/:courseID" element={<CoursePage />} />
         <Route path="/courses/new" element={<CreateCoursePage />} />
         <Route path="/courses/:courseID/edit" element={<EditCoursePage />} />
+        <Route path="/courses/:courseID/instructors/edit" element={<EditInstructorsPage />} />
       </Route>
 
       <Route path="*" element={<Navigate to="/dashboard" />} />

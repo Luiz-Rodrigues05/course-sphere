@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import { getCourseInstructors } from '../../../services/course';
 import { getInstructorListStyles } from './styles';
 import InstructorCard from '../../molecules/Cards/Instructor';
-import InstructorsModal from '../InstructorsModal';
+import { useNavigate } from 'react-router-dom';
 
 const INSTRUCTORS_PER_PAGE = 1;
 
@@ -17,7 +17,7 @@ const InstructorsList = ({ course, canEdit, onUpdate, showNotification }) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalInstructors, setTotalInstructors] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const styles = getInstructorListStyles(theme);
@@ -77,7 +77,7 @@ const InstructorsList = ({ course, canEdit, onUpdate, showNotification }) => {
           Instrutores
         </Typography>
         {canEdit && (
-          <Button variant="outlined" size="small" onClick={() => setIsModalOpen(true)}>
+          <Button variant="outlined" size="small" onClick={() => navigate(`/courses/${course.id}/instructors/edit`)}>
             Gerenciar
           </Button>
         )}
@@ -99,14 +99,6 @@ const InstructorsList = ({ course, canEdit, onUpdate, showNotification }) => {
           />
         </Box>
       )}
-
-      <InstructorsModal
-        open={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        course={course}
-        onUpdate={onUpdate}
-        showNotification={showNotification}
-      />
     </Box>
   );
 };
