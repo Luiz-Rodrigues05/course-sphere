@@ -247,26 +247,27 @@ server.get('/courses/:courseID/lessons', (req, res) => {
     lessons = lessons.filter(lesson => lesson.status === status);
   }
 
-  // 4. Adiciona o campo 'can_edit' a cada aula
-  const enrichedLessons = lessons.map(lesson => {
-    // O usuário pode editar a aula se:
-    // a) Ele for o criador do CURSO.
-    // b) Ele for o criador da AULA.
-    const isLessonCreator = userID === lesson.creator_id;
-    lesson.can_edit = isCourseCreator || isLessonCreator;
-    return lesson;
-  });
-
   // 5. Paginação da lista enriquecida
-  const totalCount = enrichedLessons.length;
+  const totalCount = lessons.length;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const paginatedLessons = enrichedLessons.slice(startIndex, endIndex);
+  const paginatedLessons = lessons.slice(startIndex, endIndex);
+
+  const enrichedPaginatedLessons = paginatedLessons.map(lesson => {
+    const isCourseCreator = userID === course.creator_id;
+    const isCourseInstructor = course.instructors && course.instructors.includes(userID);
+    const isLessonCreator = userID == lesson.creator_id;
+
+    const hasPermission = isCourseCreator || (isCourseInstructor && isLessonCreator);
+
+    lesson.can_edit = hasPermission;
+    return lesson;
+  });
 
   res.setHeader('X-Total-Count', totalCount);
   res.setHeader('Access-Control-Expose-Headers', 'X-Total-Count');
 
-  res.status(200).json(paginatedLessons);
+  res.status(200).json(enrichedPaginatedLessons);
 });
 
 // ### INÍCIO DAS NOVAS ROTAS DE AULAS ###
@@ -277,8 +278,9 @@ server.post('/lessons', (req, res) => {
   // Renomeando 'courseId' para 'course_id' para consistência com o db.json
   const { title, courseId, creatorId, video_url } = lessonData;
   const course_id = courseId;
+  const creator_id = creatorId;
 
-  if (!title || !course_id || !creatorId || !video_url) {
+  if (!title || !course_id || !creator_id || !video_url) {
     return res.status(400).json({ message: 'Dados insuficientes para criar a aula.' });
   }
 
@@ -294,7 +296,8 @@ server.post('/lessons', (req, res) => {
   const newLesson = {
     id: newId,
     ...lessonData,
-    course_id: parseInt(course_id, 10), // Garantir que seja um número
+    course_id: parseInt(course_id, 10),
+    creator_id: parseInt(creator_id, 10)
   };
   delete newLesson.courseId; // Remove a chave antiga se existir
   
