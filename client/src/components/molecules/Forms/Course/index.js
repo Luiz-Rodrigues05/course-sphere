@@ -3,7 +3,7 @@ import { TextField, Button, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
 import { getCourseFormStyles } from './styles';
 
-const CourseForm = ({ course, onSave, onDelete, onCancel }) => {
+const CourseForm = ({ course, onSave, onDelete, variant }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -15,7 +15,7 @@ const CourseForm = ({ course, onSave, onDelete, onCancel }) => {
   const styles = getCourseFormStyles(theme);
 
   useEffect(() => {
-    if (course) {
+    if (variant === 'update' && course) {
       setFormData({
         name: course.name || '',
         description: course.description || '',
@@ -26,35 +26,20 @@ const CourseForm = ({ course, onSave, onDelete, onCancel }) => {
       setFormData({ name: '', description: '', start_date: '', end_date: '' });
     }
     setErrors({});
-  }, [course]);
+  }, [course, variant]);
 
   const validate = () => {
     let tempErrors = {};
-    
-    // Validação do nome
-    if (!formData.name.trim()) {
-      tempErrors.name = 'O nome do curso é obrigatório.';
-    } else if (formData.name.trim().length < 3) {
-      tempErrors.name = 'O nome deve ter pelo menos 3 caracteres.';
-    }
-
-    // Validação da descrição
-    if (formData.description && formData.description.length > 500) {
-      tempErrors.description = 'A descrição não pode exceder 500 caracteres.';
-    }
-
-    // Validação das datas
-    if (!formData.start_date) {
-      tempErrors.start_date = 'A data de início é obrigatória.';
-    }
+    if (!formData.name.trim()) tempErrors.name = 'O nome do curso é obrigatório.';
+    if (formData.name.trim().length < 3) tempErrors.name = 'O nome deve ter pelo menos 3 caracteres.';
+    if (formData.description && formData.description.length > 500) tempErrors.description = 'A descrição não pode exceder 500 caracteres.';
+    if (!formData.start_date) tempErrors.start_date = 'A data de início é obrigatória.';
     if (!formData.end_date) {
       tempErrors.end_date = 'A data de fim é obrigatória.';
-    } else if (formData.start_date && formData.end_date && new Date(formData.end_date) <= new Date(formData.start_date)) {
+    } else if (formData.start_date && new Date(formData.end_date) <= new Date(formData.start_date)) {
       tempErrors.end_date = 'A data de fim deve ser posterior à data de início.';
     }
-
     setErrors(tempErrors);
-    // Retorna true se não houver erros
     return Object.keys(tempErrors).length === 0;
   };
 
@@ -115,19 +100,14 @@ const CourseForm = ({ course, onSave, onDelete, onCancel }) => {
         required
       />
       <Box sx={styles.actions}>
-        <Box>
-          <Button type="submit" variant="contained" color="primary">
-            Salvar
-          </Button>
-          <Button onClick={onCancel} sx={{ ml: 1 }}>
-            Cancelar
-          </Button>
-        </Box>
-        {course && (
+        {variant === 'update' && course && (
           <Button onClick={() => onDelete(course.id)} variant="contained" color="error">
             Deletar
           </Button>
         )}
+        <Button type="submit" variant="contained" color="primary">
+          {variant === 'create' ? 'Criar Curso' : 'Salvar Alterações'}
+        </Button>
       </Box>
     </form>
   );
