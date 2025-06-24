@@ -8,6 +8,7 @@ import LessonCard from '../../molecules/Cards/Lesson';
 import { getLessonsListStyles } from './styles';
 import { getLessons } from '../../../services/lesson';
 import { debounce } from '../../../services/debounce';
+import { useNavigate } from 'react-router-dom';
 
 const LESSONS_PER_PAGE = 1;
 
@@ -23,6 +24,7 @@ const LessonsList = ({ courseID }) => {
   const [statusFilter, setStatusFilter] = useState('');
   const [debouncedSearchTerm, setDebouncedSearchTerm] = useState('');
   const debouncedSetSearch = useCallback(debounce(setDebouncedSearchTerm, 500), []);
+  const navigate = useNavigate();
 
   useEffect(() => {
     debouncedSetSearch(searchTerm);
@@ -64,7 +66,7 @@ const LessonsList = ({ courseID }) => {
         <Typography variant="h5" component="h3">
           Aulas
         </Typography>
-        <Button variant="contained" size="small">
+        <Button variant="contained" size="small" onClick={()=> navigate(`/courses/${courseID}/lessons/new`)}>
           Criar Nova Aula
         </Button>
       </Box>
