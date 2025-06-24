@@ -9,7 +9,6 @@ import { getCoursePageStyles } from './styles';
 import CourseInfo from '../../organisms/CourseInfo';
 import InstructorsList from '../../organisms/InstructorsList';
 import LessonsList from '../../organisms/LessonsList';
-import CourseModal from '../../organisms/CourseModal';
 
 const CoursePage = () => {
   const { courseID } = useParams();
@@ -19,7 +18,6 @@ const CoursePage = () => {
   const [course, setCourse] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'info' });
 
   const theme = useTheme();
@@ -51,30 +49,6 @@ const CoursePage = () => {
     setSnackbar(prev => ({ ...prev, open: false }));
   };
 
-  const handleOpenModal = () => setIsModalOpen(true);
-  const handleCloseModal = () => setIsModalOpen(false);
-
-  const handleSaveCourse = async (courseData) => {
-    try {
-      await updateCourse(course.id, courseData);
-      await fetchCourseDetails(); // Re-fetch para atualizar a UI
-      handleCloseModal();
-      showNotification('Curso atualizado com sucesso!', 'success');
-    } catch (err) {
-      showNotification(err.message || 'Erro ao atualizar o curso.', 'error');
-    }
-  };
-
-  const handleDeleteCourse = async (courseId) => {
-    try {
-      await deleteCourse(courseId);
-      showNotification('Curso deletado com sucesso!', 'success');
-      navigate('/dashboard');
-    } catch (err) {
-      showNotification(err.message || 'Erro ao deletar o curso.', 'error');
-    }
-  };
-
   if (loading) {
     return <Box sx={styles.loadingContainer}><CircularProgress /></Box>;
   }
@@ -90,7 +64,7 @@ const CoursePage = () => {
   return (
     <Box component="main" sx={styles.mainContent}>
       <Stack spacing={4}>
-        <CourseInfo course={course} onEdit={handleOpenModal} canEdit={canEdit} />
+        <CourseInfo course={course} canEdit={canEdit} />
         <InstructorsList
           course={course}
           canEdit={canEdit}
@@ -99,18 +73,6 @@ const CoursePage = () => {
         />
         <LessonsList courseID={courseID} canEdit={canEdit} />
       </Stack>
-
-      {course && (
-        <CourseModal
-          open={isModalOpen}
-          onClose={handleCloseModal}
-          course={course}
-          onSave={handleSaveCourse}
-          onDelete={handleDeleteCourse}
-          onValidationFail={showNotification}
-        />
-      )}
-      
       <Snackbar
         open={snackbar.open}
         autoHideDuration={6000}

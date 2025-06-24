@@ -2,11 +2,13 @@ import React from 'react';
 import { Box, Typography, IconButton } from '@mui/material';
 import { Settings } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 import { getCourseInfoStyles } from './styles';
 
-const CourseInfo = ({ course, onEdit, canEdit }) => {
+const CourseInfo = ({ course, canEdit }) => {
   const theme = useTheme();
   const styles = getCourseInfoStyles(theme);
+  const navigate = useNavigate();
 
   return (
     <Box>
@@ -19,7 +21,7 @@ const CourseInfo = ({ course, onEdit, canEdit }) => {
           <IconButton 
             aria-label="Editar informações do curso" 
             size="small"
-            onClick={() => onEdit(course)}
+            onClick={() => navigate(`/courses/${course.id}/edit`)}
           >
             <Settings sx={{ color: theme.palette.text.primary }}/>
           </IconButton>
