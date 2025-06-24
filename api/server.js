@@ -50,7 +50,7 @@ server.post('/users', (req, res) => {
 });
   
 // Endpoint para buscar os cursos de um usuário
-server.get('/user/:userID/courses', (req, res) => {
+server.get('/users/:userID/courses', (req, res) => {
   const { userID } = req.params;
   const id = parseInt(userID, 10);
 
