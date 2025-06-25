@@ -10,7 +10,7 @@ import { getLessons } from '../../../services/lesson';
 import { debounce } from '../../../services/debounce';
 import { useNavigate } from 'react-router-dom';
 
-const LESSONS_PER_PAGE = 1;
+const LESSONS_PER_PAGE = 5;
 
 const LessonsList = ({ courseID }) => {
   const theme = useTheme();
@@ -79,7 +79,7 @@ const LessonsList = ({ courseID }) => {
           onChange={(e) => setSearchTerm(e.target.value)}
           sx={{ flexGrow: 1 }}
         />
-        <FormControl sx={{ minWidth: 180 }}>
+        <FormControl sx={{ minWidth: 140 }}>
           <InputLabel id="status-filter-label">Status</InputLabel>
           <Select
             labelId="status-filter-label"

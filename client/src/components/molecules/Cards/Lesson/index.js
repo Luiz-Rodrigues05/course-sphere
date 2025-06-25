@@ -31,21 +31,20 @@ const LessonCard = ({ lesson }) => {
         <Typography sx={styles.title} variant="h6" component="h4">
           {lesson.title}
         </Typography>
+      </CardContent>
+
+      <CardActions sx={styles.actions}>
         <Chip
           label={lesson.status === 'published' ? 'Publicada' : 'Rascunho'}
           color={lesson.status === 'published' ? 'success' : 'default'}
           size="small"
-          sx={styles.status}
         />
-      </CardContent>
-
-      { lesson.can_edit && (
-        <CardActions sx={styles.actions}>
+        { lesson.can_edit && (
           <IconButton aria-label="edit lesson" size="small" onClick={handleEdit}>
             <EditIcon fontSize="small" />
           </IconButton>
-        </CardActions>
-      )}
+        )}
+      </CardActions>
     </Card>
   );
 };

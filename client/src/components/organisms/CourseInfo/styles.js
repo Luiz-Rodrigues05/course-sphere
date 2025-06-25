@@ -1,5 +1,6 @@
 export const getCourseInfoStyles = (theme) => ({
   titleContainer: {
+    wordBreak: 'break-word',
     display: 'flex',
     alignItems: 'center',
     marginBottom: theme.spacing(2),

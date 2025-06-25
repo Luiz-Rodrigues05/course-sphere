@@ -20,8 +20,6 @@ export const getLessonCardStyles = (theme) => ({
   info: {
     padding: theme.spacing(2),
     flexGrow: 1,
-    display: 'flex',
-    flexDirection: 'column',
   },
   title: {
     fontSize: '1rem',
@@ -31,12 +29,9 @@ export const getLessonCardStyles = (theme) => ({
     whiteSpace: 'nowrap',
     marginBottom: theme.spacing(1),
   },
-  status: {
-    marginTop: 'auto',
-    alignSelf: 'flex-start',
-  },
   actions: {
-    justifyContent: 'flex-end',
-    padding: theme.spacing(0, 1, 1, 1),
+    justifyContent: 'space-between', 
+    alignItems: 'center',
+    padding: theme.spacing(2, 2),
   },
 });
