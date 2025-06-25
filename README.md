@@ -1,8 +1,19 @@
 # Course Sphere
 
-Course Sphere é uma plataforma web para o gerenciamento colaborativo de cursos online. 
+Course Sphere é uma plataforma web para o gerenciamento colaborativo de cursos online.
 Este projeto foi desenvolvido como parte do Desafio Front-End.
 
+## ☁️ Deploy e Dados para Teste
+
+### Deploy
+A aplicação foi implantada e está disponível para uso no seguinte endereço:
+
+**[https://course-sphere-client.onrender.com/](https://course-sphere-client.onrender.com/)**
+
+### Dados para Teste
+Os dados para teste, incluindo usuários, cursos e aulas, estão disponíveis no arquivo `api/db.json`. Este arquivo é utilizado como banco de dados pelo **JSON Server**.
+
+Para testar a aplicação, você pode utilizar qualquer um dos usuários definidos neste arquivo.
 
 ## 🚀 Stack de Tecnologia
 
