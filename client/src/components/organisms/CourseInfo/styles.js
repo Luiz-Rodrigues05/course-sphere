@@ -12,7 +12,7 @@ export const getCourseInfoStyles = (theme) => ({
     wordBreak: 'break-word',
     overflow: 'hidden',
     display: '-webkit-box',
-    WebkitLineClamp: 4,
+    WebkitLineClamp: '99',
     WebkitBoxOrient: 'vertical',
   },
   emptyDescription: {

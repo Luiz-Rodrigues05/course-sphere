@@ -1,15 +1,16 @@
-import React, { useState, useEffect, useCallback } from 'react'; // 1. Importar useCallback
+import React, { useState, useEffect, useCallback } from 'react';
 import {
-  Box, Typography, Button, CircularProgress, 
-  Alert, Pagination, Grid
+  Box, Typography, CircularProgress, 
+  Alert, Pagination, Grid, IconButton
 } from '@mui/material';
+import { Settings } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { getCourseInstructors } from '../../../services/course';
 import { getInstructorListStyles } from './styles';
 import InstructorCard from '../../molecules/Cards/Instructor';
 import { useNavigate } from 'react-router-dom';
 
-const INSTRUCTORS_PER_PAGE = 1;
+const INSTRUCTORS_PER_PAGE = 10;
 
 const InstructorsList = ({ course, onUpdate, showNotification }) => {
   const [instructors, setInstructors] = useState([]);
@@ -77,9 +78,13 @@ const InstructorsList = ({ course, onUpdate, showNotification }) => {
           Instrutores
         </Typography>
         {course.can_edit && (
-          <Button variant="outlined" size="small" onClick={() => navigate(`/courses/${course.id}/instructors/edit`)}>
-            Gerenciar
-          </Button>
+          <IconButton 
+            aria-label="Gerenciar instrutores do curso" 
+            size="small" 
+            onClick={() => navigate(`/courses/${course.id}/instructors/edit`)}
+          >
+            <Settings sx={{ fill: 'none', stroke: theme.palette.text.primary }}/>
+          </IconButton>
         )}
       </Box>
       <Box sx={{

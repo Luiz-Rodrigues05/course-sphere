@@ -1,14 +1,41 @@
 export const getInstructorCardStyles = (theme) => ({
   card: {
     textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing(2),
+    height: '200px',
+    width: '180px',
+    boxShadow: theme.shadows[1],
+    borderRadius: '8px',
+    transition: 'transform 0.2s ease-in-out',
+    '&:hover': {
+      transform: 'translateY(-5px)',
+      boxShadow: theme.shadows[4],
+    },
   },
   avatar: {
     width: 80,
     height: 80,
-    margin: 'auto',
     marginTop: theme.spacing(2),
   },
   cardContent: {
-    paddingTop: theme.spacing(1.5),
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: theme.spacing(1.5, 0, 0, 0),
+    wordBreak: 'break-word',
+  },
+  name: {
+    fontSize: '1.1rem',
+    fontWeight: 600,
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
+    textAlign: 'center',
   },
 });

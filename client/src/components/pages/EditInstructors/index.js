@@ -1,26 +1,27 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Paper, Typography, Box, Button, List, ListItem, ListItemText,
-  IconButton, CircularProgress, Alert
+  Box, Typography, Button, List, ListItem, ListItemText,
+  IconButton, CircularProgress, Alert, Paper
 } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
 import { getEditInstructorsPageStyles } from './styles';
 import { getCourse, getCourseInstructors, updateInstructors } from '../../../services/course';
 import { getRandomUser, createUser } from '../../../services/user';
+import { useSnackbar } from 'notistack';
 
 const EditInstructorsPage = () => {
   const { courseID } = useParams();
   const navigate = useNavigate();
   const theme = useTheme();
   const styles = getEditInstructorsPageStyles(theme);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [course, setCourse] = useState(null);
   const [instructors, setInstructors] = useState([]);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
-  const [notification, setNotification] = useState({ open: false, message: '', severity: 'info' });
 
   const fetchPageData = useCallback(async () => {
     if (!courseID) return;
@@ -34,31 +35,30 @@ const EditInstructorsPage = () => {
       setCourse(courseResponse.data);
 
       const instructorsResponse = await getCourseInstructors(courseID);
-      setInstructors(instructorsResponse.data);
+      const instructorsWithImages = instructorsResponse.data.map(instructor => ({
+        ...instructor,
+        imageUrl: `https://i.pravatar.cc/150?u=${instructor.id}`
+      }));
+      setInstructors(instructorsWithImages);
     } catch (error) {
-      setNotification({ open: true, message: error.message || 'Erro ao buscar dados.', severity: 'error' });
+      enqueueSnackbar(error.message || 'Erro ao buscar dados.', { variant: 'error' });
     } finally {
       setLoading(false);
     }
-  }, [courseID, navigate]);
+  }, [courseID, navigate, enqueueSnackbar]);
 
   useEffect(() => {
     fetchPageData();
   }, [fetchPageData]);
 
-  const showNotification = (message, severity) => {
-    setNotification({ open: true, message, severity });
-    setTimeout(() => setNotification({ open: false, message: '', severity: 'info' }), 6000);
-  };
-
   const handleRemove = async (instructorId) => {
     const newInstructorIds = course.instructors.filter(id => id !== instructorId);
     try {
       await updateInstructors(courseID, { instructors: newInstructorIds });
-      showNotification('Instrutor removido com sucesso!', 'success');
-      fetchPageData(); // Re-fetch all data to ensure consistency
+      enqueueSnackbar('Instrutor removido com sucesso!', { variant: 'success' });
+      fetchPageData();
     } catch (error) {
-      showNotification(error.message || 'Erro ao remover instrutor.', 'error');
+      enqueueSnackbar(error.message || 'Erro ao remover instrutor.', { variant: 'error' });
     }
   };
 
@@ -76,10 +76,10 @@ const EditInstructorsPage = () => {
 
       const newInstructorIds = [...course.instructors, newLocalUser.id];
       await updateInstructors(courseID, { instructors: newInstructorIds });
-      showNotification('Novo instrutor adicionado com sucesso!', 'success');
-      fetchPageData(); // Re-fetch all data
+      enqueueSnackbar('Novo instrutor adicionado com sucesso!', { variant: 'success' });
+      fetchPageData();
     } catch (error) {
-      showNotification(error.message || 'Erro ao adicionar novo instrutor.', 'error');
+      enqueueSnackbar(error.message || 'Erro ao adicionar novo instrutor.', { variant: 'error' });
     } finally {
       setAdding(false);
     }
@@ -92,12 +92,6 @@ const EditInstructorsPage = () => {
           <Typography variant="h4" component="h1" gutterBottom>
             Gerenciar Instrutores
           </Typography>
-
-          {notification.open && (
-            <Alert severity={notification.severity} sx={{ mb: 2 }}>
-              {notification.message}
-            </Alert>
-          )}
 
           <Box sx={styles.listContainer}>
             {loading ? (

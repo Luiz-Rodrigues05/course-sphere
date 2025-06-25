@@ -395,7 +395,7 @@ server.get('/courses/:courseID/instructors', (req, res) => {
   const instructorIds = course.instructors || [];
   const instructors = router.db.get('users').filter(user => instructorIds.includes(user.id)).value();
 
-  const { _page = 1, _limit = 5 } = req.query;
+  const { _page = 1, _limit = 100 } = req.query;
   const page = parseInt(_page, 10);
   const limit = parseInt(_limit, 10);
 

@@ -15,7 +15,11 @@ const InstructorCard = ({ instructor }) => {
         sx={styles.avatar}
       />
       <CardContent sx={styles.cardContent}>
-        <Typography variant="h6" component="h3">
+        <Typography 
+          variant="h6" 
+          component="h3" 
+          sx={styles.name}
+        >
           {instructor.name}
         </Typography>
       </CardContent>

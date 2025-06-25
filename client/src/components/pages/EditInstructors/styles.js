@@ -9,10 +9,14 @@ export const getEditInstructorsPageStyles = (theme) => ({
     padding: theme.spacing(4),
   },
   listContainer: {
-    minHeight: '200px',
+    maxHeight: '300px',
+    overflowY: 'auto',
     position: 'relative',
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(2),
+    border: `1px solid ${theme.palette.divider}`,
+    borderRadius: theme.shape.borderRadius,
+    padding: theme.spacing(1),
   },
   feedbackContainer: {
     display: 'flex',
@@ -23,6 +27,8 @@ export const getEditInstructorsPageStyles = (theme) => ({
     position: 'absolute',
     top: 0,
     left: 0,
+    backgroundColor: theme.palette.background.paper,
+    zIndex: 1,
   },
   actions: {
     display: 'flex',
