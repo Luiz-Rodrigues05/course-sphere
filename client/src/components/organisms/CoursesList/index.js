@@ -50,7 +50,13 @@ const CoursesList = () => {
       );
     }
     return (
-      <Grid container spacing={3}>
+      <Grid 
+        container 
+        spacing={3} 
+        sx={{ 
+          justifyContent: { xs: 'center', sm: 'flex-start' } 
+        }}
+      >
         {courses.map(course => (
           <Grid item key={course.id} xs={12} sm={6} md={4}>
             <CourseCard course={course} />
@@ -63,7 +69,7 @@ const CoursesList = () => {
   return (
     <Box>
       <Box sx={listStyles.header}>
-        <Typography variant="h5" component="h2">
+        <Typography variant="h4" component="h2">
           Meus Cursos
         </Typography>
         <Button

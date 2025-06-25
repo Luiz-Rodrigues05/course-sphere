@@ -1,7 +1,8 @@
 export const getCoursesListStyles = (theme) => ({
   header: {
     display: 'flex',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
+    flexDirection: 'column',
     alignItems: 'center',
     marginBottom: theme.spacing(3),
   },

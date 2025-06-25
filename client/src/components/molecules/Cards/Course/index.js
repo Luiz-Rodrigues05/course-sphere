@@ -15,12 +15,22 @@ const CourseCard = ({ course }) => {
   return (
     <Card sx={styles.card}>
       <CardContent sx={styles.cardContent}>
-        <Typography variant="h6" component="h2" gutterBottom>
+        <Typography variant="h6" component="h2" gutterBottom sx={styles.title}>
           {name}
         </Typography>
-        <Typography variant="body2" color="text.secondary" sx={styles.description}>
-          {description}
-        </Typography>
+        
+        <Box sx={styles.descriptionContainer}>
+          {description ? (
+            <Typography variant="body2" color="text.secondary" sx={styles.description}>
+              {description}
+            </Typography>
+          ) : (
+            <Typography variant="body2" sx={styles.emptyDescription}>
+              (Sem descrição disponível)
+            </Typography>
+          )}
+        </Box>
+
         <Box sx={styles.dates}>
           <Typography variant="caption">
             Início: {new Date(start_date).toLocaleDateString()}
