@@ -34,18 +34,31 @@ A aplicação é construída com uma arquitetura de cliente-servidor, utilizando
 ## ⚙️ Pré-requisitos
 
 Antes de começar, certifique-se de ter as seguintes ferramentas instaladas em sua máquina:
-- [Node.js](https://nodejs.org/en/) (versão 14.x ou superior)
 - [Docker](https://www.docker.com/get-started/) e [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## 🏁 Como Executar o Projeto
 
-Você pode executar o projeto de duas maneiras: utilizando Docker (recomendado) ou localmente.
+Para executar o projeto localmente, você deve utilizar o Docker.
 
 ### 1. Com Docker (Recomendado)
-
-A forma mais simples de subir a aplicação completa (frontend e backend) é com o Docker Compose.
 
 Na raiz do projeto, execute o seguinte comando:
 
 ```bash
-docker-compose up --build
+docker compose build
+```
+Isso irá buildar as imagens docker necessárias para o projeto. Em seguida, execute:
+
+```bash
+docker compose run --rm client npm install
+```
+Isso irá instalar as dependências e módulos do projeto, diretamente no container do client. Como ele tem um volume mapeado para o diretório /client, vai ter a pasta de dependências no diretório /client também.
+
+Após isso, verificar se as portas 3000 e 5000 estão disponíveis na máquina. Se não estiverem, você pode facilmente trocar do docker-compose.yml por uma disponível, lembrando de manter a porta da api utilizada na variável REACT_APP_API_URL.
+
+Depois, pode executar:
+
+```bash
+docker compose up -d
+```
+
