@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { getCourse, updateCourse, deleteCourse } from '../../../services/course';
+import { useParams } from 'react-router-dom';
+import { getCourse } from '../../../services/course';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Box, CircularProgress, Alert, Stack, Snackbar } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
@@ -12,7 +12,6 @@ import LessonsList from '../../organisms/LessonsList';
 
 const CoursePage = () => {
   const { courseID } = useParams();
-  const navigate = useNavigate();
   const { user } = useAuth();
   
   const [course, setCourse] = useState(null);

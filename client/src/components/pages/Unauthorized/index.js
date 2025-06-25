@@ -1,12 +1,11 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { useTheme } from '@mui/material/styles';
 import { Box, Typography, Button } from '@mui/material';
 import { ReactComponent as Error401Svg } from '../../../assets/images/error-401.svg';
 import { getErrorPageStyles } from './styles';
 
 const Unauthorized = () => {
-  const navigate = useNavigate();
   const theme = useTheme();
   const styles = getErrorPageStyles(theme);
 
@@ -25,7 +24,8 @@ const Unauthorized = () => {
         variant="contained"
         color="primary"
         sx={styles.button}
-        onClick={() => navigate('/login')}
+        component={RouterLink}
+        to="/login"
       >
         Ir para Login
       </Button>

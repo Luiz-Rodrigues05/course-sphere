@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { Typography, Card, CardMedia, CardContent, CardActions, Chip, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from '@mui/material/styles';
@@ -8,16 +8,11 @@ import { getLessonCardStyles } from './styles';
 const LessonCard = ({ lesson }) => {
   const theme = useTheme();
   const styles = getLessonCardStyles(theme);
-  const navigate = useNavigate();
 
   const videoId = lesson.video_url?.split('v=')[1]?.split('&')[0];
   const thumbnailUrl = videoId 
     ? `https://i.ytimg.com/vi/${videoId}/mqdefault.jpg`
     : 'https://via.placeholder.com/320x180.png?text=Video+Indisponível';
-
-  const handleEdit = () => {
-    navigate(`/lessons/${lesson.id}/edit`);
-  };
 
   return (
     <Card sx={styles.card}>
@@ -40,7 +35,12 @@ const LessonCard = ({ lesson }) => {
           size="small"
         />
         { lesson.can_edit && (
-          <IconButton aria-label="edit lesson" size="small" onClick={handleEdit}>
+          <IconButton 
+            aria-label="edit lesson" 
+            size="small" 
+            component={RouterLink}
+            to={`/lessons/${lesson.id}/edit`}
+          >
             <EditIcon fontSize="small" />
           </IconButton>
         )}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 import { getCourses } from '../../../services/course';
 import { useAuth } from '../../../contexts/AuthContext';
 import { Box, Typography, Button, Grid, CircularProgress, Alert } from '@mui/material';
@@ -15,7 +15,6 @@ const CoursesList = () => {
   const { user } = useAuth();
   const theme = useTheme();
   const listStyles = getCoursesListStyles(theme);
-  const navigate = useNavigate();
 
   const fetchCourses = async () => {
     if (!user?.id) {
@@ -73,9 +72,10 @@ const CoursesList = () => {
           Meus Cursos
         </Typography>
         <Button
+          component={RouterLink}
+          to="/courses/new"
           variant="contained"
           sx={{ marginTop: theme.spacing(2) }}
-          onClick={() => navigate('/courses/new')}
         >
           Criar Novo Curso
         </Button>

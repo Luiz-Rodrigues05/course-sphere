@@ -8,7 +8,7 @@ import { useTheme } from '@mui/material/styles';
 import { getCourseInstructors } from '../../../services/course';
 import { getInstructorListStyles } from './styles';
 import InstructorCard from '../../molecules/Cards/Instructor';
-import { useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 
 const INSTRUCTORS_PER_PAGE = 10;
 
@@ -18,7 +18,6 @@ const InstructorsList = ({ course, onUpdate, showNotification }) => {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalInstructors, setTotalInstructors] = useState(0);
-  const navigate = useNavigate();
 
   const theme = useTheme();
   const styles = getInstructorListStyles(theme);
@@ -81,7 +80,8 @@ const InstructorsList = ({ course, onUpdate, showNotification }) => {
           <IconButton 
             aria-label="Gerenciar instrutores do curso" 
             size="small" 
-            onClick={() => navigate(`/courses/${course.id}/instructors/edit`)}
+            component={RouterLink}
+            to={`/courses/${course.id}/instructors/edit`}
           >
             <Settings sx={{ fill: 'none', stroke: theme.palette.text.primary }}/>
           </IconButton>

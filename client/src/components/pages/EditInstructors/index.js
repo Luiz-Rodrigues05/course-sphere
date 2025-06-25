@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import {
   Box, Typography, Button, List, ListItem, ListItemText,
   IconButton, CircularProgress, Alert, Paper
@@ -13,7 +13,6 @@ import { useSnackbar } from 'notistack';
 
 const EditInstructorsPage = () => {
   const { courseID } = useParams();
-  const navigate = useNavigate();
   const theme = useTheme();
   const styles = getEditInstructorsPageStyles(theme);
   const { enqueueSnackbar } = useSnackbar();
@@ -23,12 +22,13 @@ const EditInstructorsPage = () => {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
 
+  const navigate = useNavigate(); 
   const fetchPageData = useCallback(async () => {
     if (!courseID) return;
     setLoading(true);
     try {
       const courseResponse = await getCourse(courseID);
-       if (courseResponse.data.can_edit === false) {
+        if (courseResponse.data.can_edit === false) {
         navigate('/forbidden');
         return; 
       }
@@ -115,7 +115,7 @@ const EditInstructorsPage = () => {
           </Box>
 
           <Box sx={styles.actions}>
-            <Button onClick={() => navigate(`/courses/${courseID}`)}>
+            <Button component={RouterLink} to={`/courses/${courseID}`}>
               Voltar ao Curso
             </Button>
             <Button onClick={handleAdd} variant="contained" disabled={adding || loading}>

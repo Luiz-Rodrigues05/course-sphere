@@ -6,7 +6,7 @@ import { LoadingButton } from '@mui/lab';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 
-import { loginSchema } from '../../../../schemas/loginSchema'; // Ajuste o caminho se necessário
+import { loginSchema } from '../../../../schemas/loginSchema';
 import { useAuth } from '../../../../contexts/AuthContext';
 import { login } from '../../../../services/user';
 import { styles } from './styles';

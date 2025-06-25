@@ -34,11 +34,7 @@ const EditLessonPage = () => {
   }, [lessonID]);
 
   const navigateBackToCourse = () => {
-    if (lesson?.course_id) {
-      navigate(`/courses/${lesson.course_id}`);
-    } else {
-      navigate('/dashboard');
-    }
+    navigate(`/courses/${lesson.course_id}`);
   };
 
   const handleUpdate = async (data) => {

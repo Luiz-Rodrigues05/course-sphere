@@ -1,14 +1,13 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { Box, Typography, IconButton } from '@mui/material';
 import { Settings } from '@mui/icons-material';
 import { useTheme } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
 import { getCourseInfoStyles } from './styles';
 
 const CourseInfo = ({ course }) => {
   const theme = useTheme();
   const styles = getCourseInfoStyles(theme);
-  const navigate = useNavigate();
 
   return (
     <Box>
@@ -21,7 +20,8 @@ const CourseInfo = ({ course }) => {
           <IconButton 
             aria-label="Editar informações do curso" 
             size="small"
-            onClick={() => navigate(`/courses/${course.id}/edit`)}
+            component={RouterLink}
+            to={`/courses/${course.id}/edit`}
           >
             <Settings sx={{ fill: 'none', stroke: theme.palette.text.primary }}/>
           </IconButton>
