@@ -1,9 +1,10 @@
 export const getLessonCardStyles = (theme) => ({
   card: {
+    width: '270px',
+    height: '280px',
     display: 'flex',
     flexDirection: 'column',
     flexShrink: 0,
-    minHeight: 200,
     borderRadius: '8px',
     boxShadow: theme.shadows[1],
     overflow: 'hidden',
@@ -14,24 +15,26 @@ export const getLessonCardStyles = (theme) => ({
     },
   },
   thumbnail: {
-    height: 125,
-    objectFit: 'cover',
+    flexShrink: 0,
   },
   info: {
     padding: theme.spacing(2),
-    flexGrow: 1,
+    flexGrow: 1, 
+    minHeight: 0, 
   },
   title: {
     fontSize: '1rem',
     fontWeight: 600,
+    wordBreak: 'break-word',
     overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
-    marginBottom: theme.spacing(1),
+    display: '-webkit-box',
+    WebkitLineClamp: 2,
+    WebkitBoxOrient: 'vertical',
   },
   actions: {
     justifyContent: 'space-between', 
     alignItems: 'center',
-    padding: theme.spacing(2, 2),
+    padding: theme.spacing(1, 2),
+    flexShrink: 0
   },
 });
