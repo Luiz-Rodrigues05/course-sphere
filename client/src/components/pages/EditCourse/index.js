@@ -21,10 +21,18 @@ const EditCoursePage = () => {
       try {
         setLoading(true);
         const response = await getCourse(courseID);
-        setCourse(response.data);
+        if (response.data.can_edit === false) {
+          navigate('/forbidden');
+          return;
+        }
+        const fetchedCourse = {
+          ...response.data,
+          start_date: response.data.start_date ? new Date(response.data.start_date).toISOString().split('T')[0] : '',
+          end_date: response.data.end_date ? new Date(response.data.end_date).toISOString().split('T')[0] : '',
+        };
+        setCourse(fetchedCourse);
       } catch (err) {
         setError('Não foi possível carregar os dados do curso.');
-        console.error(err);
       } finally {
         setLoading(false);
       }
@@ -34,21 +42,23 @@ const EditCoursePage = () => {
   }, [courseID]);
 
   const handleUpdateCourse = async (data) => {
-    try {
-      await updateCourse(courseID, data);
-      navigate('/dashboard');
-    } catch (err) {
-      console.error('Erro ao atualizar o curso:', err);
-    }
+    await updateCourse(courseID, data);
   };
 
   const handleDeleteCourse = async () => {
-    try {
-        await deleteCourse(courseID);
-        navigate('/dashboard');
-        } catch (err) {
-        console.error('Erro ao excluir o curso:', err);
-    }
+    await deleteCourse(courseID);
+  };
+
+  const handleSuccess = () => {
+    navigate(`/courses/${courseID}`);
+  };
+
+  const handleDeleteSuccess = () => {
+    navigate('/dashboard');
+  };
+
+  const handleCancel = () => {
+    navigate(`/courses/${courseID}`);
   };
 
   if (loading) {
@@ -80,6 +90,9 @@ const EditCoursePage = () => {
             course={course}
             onSave={handleUpdateCourse}
             onDelete={handleDeleteCourse}
+            onCancel={handleCancel}
+            onSuccess={handleSuccess}
+            onDeleteSuccess={handleDeleteSuccess}
           />
         </Box>
       </Paper>

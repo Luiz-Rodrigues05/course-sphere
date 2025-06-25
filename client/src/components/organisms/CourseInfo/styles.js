@@ -5,4 +5,18 @@ export const getCourseInfoStyles = (theme) => ({
     marginBottom: theme.spacing(2),
     gap: theme.spacing(2),
   },
+  descriptionContainer: {
+    marginBottom: theme.spacing(2),
+  },
+  description: {
+    wordBreak: 'break-word',
+    overflow: 'hidden',
+    display: '-webkit-box',
+    WebkitLineClamp: 4,
+    WebkitBoxOrient: 'vertical',
+  },
+  emptyDescription: {
+    fontStyle: 'italic',
+    color: theme.palette.text.disabled,
+  },
 });

@@ -23,14 +23,22 @@ const CourseInfo = ({ course }) => {
             size="small"
             onClick={() => navigate(`/courses/${course.id}/edit`)}
           >
-            <Settings sx={{ color: theme.palette.text.primary }}/>
+            <Settings sx={{ fill: 'none', stroke: theme.palette.text.primary }}/>
           </IconButton>
         )}
       </Box>
 
-      <Typography variant="body1" component="p" sx={{ mb: 2 }}>
-        <strong>Descrição:</strong> {course.description}
-      </Typography>
+      <Box sx={styles.descriptionContainer}>
+        {course.description ? (
+          <Typography variant="body1" component="p" sx={styles.description}>
+            <strong>Descrição:</strong> {course.description}
+          </Typography>
+        ) : (
+          <Typography variant="body1" component="p" sx={styles.emptyDescription}>
+            (Sem descrição disponível)
+          </Typography>
+        )}
+      </Box>
       
       <Typography variant="body2" color="text.secondary">
         <strong>Início:</strong> {new Date(course.start_date).toLocaleDateString()}
