@@ -13,13 +13,13 @@ export const getNavbarStyles = (theme) => ({
     },
     logoIcon: {
       fontSize: '2rem',
-      color: theme.palette.primary.accent,
+      color: theme.palette.text.onDark,
     },
     logoText: {
       fontWeight: 600,
       letterSpacing: '0.5px',
       fontSize: '1.6rem',
-      color: theme.palette.text.accent,
+      color: theme.palette.text.onDark,
       display: {
         xs: 'none',
         sm: 'block',

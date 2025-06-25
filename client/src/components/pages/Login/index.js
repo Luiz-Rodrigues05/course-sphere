@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
-import { Box, Typography } from '@mui/material'; // Container não é mais necessário aqui
+import { Box, Typography } from '@mui/material';
+import WelcomeSvg from '../../../assets/images/welcome.svg';
 import { useTheme } from '@mui/material/styles';
 
 import LoginCard from '../../molecules/Cards/Login';
@@ -42,26 +43,48 @@ const LoginPage = () => {
 
   return (
     <Box component="main" sx={styles.container}>
-
-      <Box sx={styles.welcomeBox}>
-        <Typography 
-          variant="h3" 
-          component="h1" 
-          gutterBottom
-          sx={styles.welcomeTitle}
-        >
-          Bem-vindo(a) à CourseSphere!
-        </Typography>
-        <Typography 
-          variant="body1" 
-          sx={styles.welcomeSubtitle}
-        >
-          A sua plataforma para gerenciar e participar de cursos de forma colaborativa.
-        </Typography>
+      <Box sx={{ ...styles.leftPanel, flexDirection: 'column' }}>
+        <Box sx={{ textAlign: 'center', mb: { md: 3, lg: 5 } }}>
+          <Typography 
+            component="h1" 
+            sx={{ 
+              fontWeight: 'bold',
+              fontSize: { md: '2.2rem', lg: '2.75rem' } 
+            }}
+          >
+            Bem vindo à CourseSphere
+          </Typography>
+          <Typography 
+            component="p"
+            sx={{ 
+              mt: 1, 
+              color: 'text.secondary',
+              fontSize: { md: '1.1rem', lg: '1.25rem' }
+            }}
+          >
+            A sua plataforma para gerenciar e participar de cursos de forma colaborativa.
+          </Typography>
+        </Box>
+        <Box
+          component="img"
+          src={WelcomeSvg} 
+          alt="Ilustração de boas-vindas da CourseSphere"
+          sx={styles.svgImage}
+        />
       </Box>
 
-      <Box sx={styles.cardBox}>
-        <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
+      <Box sx={styles.rightPanel}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ ...styles.mobileHeader, display: 'block' }}
+        >
+          CourseSphere
+        </Typography>
+        
+        <Box sx={styles.cardBox}>
+          <LoginCard onSubmit={handleLoginSubmit} loading={loading} />
+        </Box>
       </Box>
     </Box>
   );

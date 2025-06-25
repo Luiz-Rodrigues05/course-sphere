@@ -14,6 +14,7 @@ const LoginForm = ({ onSubmit, loading }) => {
 
   return (
     <>
+      <Typography variant="h5" component="h1" sx={styles.title}> Login </Typography>
       <Box 
         component="form" 
         onSubmit={handleSubmit} 
