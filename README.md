@@ -10,6 +10,8 @@ A aplicação foi implantada e está disponível para uso no seguinte endereço:
 
 **[https://course-sphere-client.onrender.com/](https://course-sphere-client.onrender.com/)**
 
+O servidor hospedado inativa a aplicação depois de um certo período sem requests, então, para a primeira request, pode demorar um pouco para carregar.
+
 ### Dados para Teste
 Os dados para teste, incluindo usuários, cursos e aulas, estão disponíveis no arquivo `api/db.json`. Este arquivo é utilizado como banco de dados pelo **JSON Server**.
 
