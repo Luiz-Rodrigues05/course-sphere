@@ -1,6 +1,6 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardMedia, CardContent, CardActions, Chip, IconButton } from '@mui/material';
+import { Typography, Card, CardMedia, CardContent, CardActions, Chip, IconButton } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import { useTheme } from '@mui/material/styles';
 import { getLessonCardStyles } from './styles';

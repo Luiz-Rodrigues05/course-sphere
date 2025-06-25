@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react'; // 1. Importar useCallback
 import {
   Box, Typography, Button, CircularProgress, 
   Alert, Pagination, Grid
@@ -22,7 +22,7 @@ const InstructorsList = ({ course, onUpdate, showNotification }) => {
   const theme = useTheme();
   const styles = getInstructorListStyles(theme);
 
-  const fetchInstructors = async () => {
+  const fetchInstructors = useCallback(async () => {
     if (!course?.id) return;
 
     setLoading(true);
@@ -41,11 +41,11 @@ const InstructorsList = ({ course, onUpdate, showNotification }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [course?.id, currentPage]);
 
   useEffect(() => {
     fetchInstructors();
-  }, [course, currentPage]);
+  }, [fetchInstructors]); 
   
   const totalPages = Math.ceil(totalInstructors / INSTRUCTORS_PER_PAGE);
 

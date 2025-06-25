@@ -40,7 +40,7 @@ const EditInstructorsPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [courseID]);
+  }, [courseID, navigate]);
 
   useEffect(() => {
     fetchPageData();
