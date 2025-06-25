@@ -11,12 +11,8 @@ server.post('/login', (req, res) => {
   const { email, password } = req.body;
   const user = router.db.get('users').find({ email }).value();
 
-  if (!user) {
-    return res.status(400).json({ message: 'Email não encontrado' });
-  }
-
-  if (user.password !== password) {
-    return res.status(400).json({ message: 'Senha incorreta' });
+  if (!user || user.password !== password) {
+    return res.status(400).json({ message: 'Email ou senha incorretos.' });
   }
   
   const session = { id: user.id, name: user.name, email: user.email };
