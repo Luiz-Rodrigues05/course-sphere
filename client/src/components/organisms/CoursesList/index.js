@@ -54,7 +54,7 @@ const CoursesList = () => {
         container 
         spacing={3} 
         sx={{ 
-          justifyContent: { xs: 'center', sm: 'flex-start' } 
+          justifyContent: { xs: 'center', sm: 'center' } 
         }}
       >
         {courses.map(course => (

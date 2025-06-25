@@ -1,107 +1,138 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box } from '@mui/material';
 import { useTheme } from '@mui/material/styles';
-import { getCourseFormStyles } from './styles';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { useSnackbar } from 'notistack';
 
-const CourseForm = ({ course, onSave, onDelete, variant }) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    start_date: '',
-    end_date: '',
-  });
-  const [errors, setErrors] = useState({});
+import { getCourseFormStyles } from './styles';
+import { courseSchema } from '../../../../schemas/courseSchema';
+
+const CourseForm = ({ course, onSave, onDelete, onCancel, variant, onSuccess, onDeleteSuccess }) => {
   const theme = useTheme();
   const styles = getCourseFormStyles(theme);
+  const { enqueueSnackbar } = useSnackbar();
+
+  const {
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(courseSchema),
+    defaultValues: {
+      name: '',
+      description: '',
+      start_date: '',
+      end_date: '',
+    },
+  });
 
   useEffect(() => {
     if (variant === 'update' && course) {
-      setFormData({
+      reset({
         name: course.name || '',
         description: course.description || '',
         start_date: course.start_date ? new Date(course.start_date).toISOString().split('T')[0] : '',
         end_date: course.end_date ? new Date(course.end_date).toISOString().split('T')[0] : '',
       });
     } else {
-      setFormData({ name: '', description: '', start_date: '', end_date: '' });
+      reset({ name: '', description: '', start_date: '', end_date: '' });
     }
-    setErrors({});
-  }, [course, variant]);
+  }, [course, variant, reset]);
 
-  const validate = () => {
-    let tempErrors = {};
-    if (!formData.name.trim()) tempErrors.name = 'O nome do curso é obrigatório.';
-    if (formData.name.trim().length < 3) tempErrors.name = 'O nome deve ter pelo menos 3 caracteres.';
-    if (formData.description && formData.description.length > 500) tempErrors.description = 'A descrição não pode exceder 500 caracteres.';
-    if (!formData.start_date) tempErrors.start_date = 'A data de início é obrigatória.';
-    if (!formData.end_date) {
-      tempErrors.end_date = 'A data de fim é obrigatória.';
-    } else if (formData.start_date && new Date(formData.end_date) <= new Date(formData.start_date)) {
-      tempErrors.end_date = 'A data de fim deve ser posterior à data de início.';
+  const onSubmit = async (data) => {
+    try {
+      await onSave(data);
+      enqueueSnackbar(`Curso ${variant === 'create' ? 'criado' : 'alterado'} com sucesso!`, { variant: 'success' });
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      enqueueSnackbar(error.message || `Erro ao ${variant === 'create' ? 'criar' : 'salvar'} o curso.`, { variant: 'error' });
     }
-    setErrors(tempErrors);
-    return Object.keys(tempErrors).length === 0;
   };
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (validate()) {
-      onSave(formData);
+  const handleDelete = async () => {
+    if (window.confirm('Tem certeza que deseja excluir este curso? Todas as aulas associadas também serão deletadas.')) {
+      try {
+        await onDelete(course.id);
+        enqueueSnackbar('Curso deletado com sucesso!', { variant: 'success' });
+        if (onDeleteSuccess) onDeleteSuccess();
+      } catch (error) {
+        enqueueSnackbar(error.message || 'Erro ao deletar o curso.', { variant: 'error' });
+      }
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} style={styles.form}>
-      <TextField
+    <form onSubmit={handleSubmit(onSubmit)} style={styles.form}>
+      <Controller
         name="name"
-        label="Nome do Curso"
-        value={formData.name}
-        onChange={handleChange}
-        error={!!errors.name}
-        helperText={errors.name}
-        required
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Nome do Curso"
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            required
+            fullWidth
+          />
+        )}
       />
-      <TextField
+      <Controller
         name="description"
-        label="Descrição"
-        value={formData.description}
-        onChange={handleChange}
-        multiline
-        rows={4}
-        error={!!errors.description}
-        helperText={errors.description}
-        inputProps={{ maxLength: 500 }}
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Descrição"
+            multiline
+            rows={4}
+            error={!!errors.description}
+            helperText={errors.description?.message}
+            inputProps={{ maxLength: 500 }}
+            fullWidth
+          />
+        )}
       />
-      <TextField
+      <Controller
         name="start_date"
-        label="Data de Início"
-        type="date"
-        value={formData.start_date}
-        onChange={handleChange}
-        InputLabelProps={{ shrink: true }}
-        error={!!errors.start_date}
-        helperText={errors.start_date}
-        required
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Data de Início"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            error={!!errors.start_date}
+            helperText={errors.start_date?.message}
+            required
+            fullWidth
+          />
+        )}
       />
-      <TextField
+      <Controller
         name="end_date"
-        label="Data de Fim"
-        type="date"
-        value={formData.end_date}
-        onChange={handleChange}
-        InputLabelProps={{ shrink: true }}
-        error={!!errors.end_date}
-        helperText={errors.end_date}
-        required
+        control={control}
+        render={({ field }) => (
+          <TextField
+            {...field}
+            label="Data de Fim"
+            type="date"
+            InputLabelProps={{ shrink: true }}
+            error={!!errors.end_date}
+            helperText={errors.end_date?.message}
+            required
+            fullWidth
+          />
+        )}
       />
       <Box sx={styles.actions}>
+        <Button onClick={onCancel} sx={{ mr: 1 }}>
+          Voltar
+        </Button>
         {variant === 'update' && course && (
-          <Button onClick={() => onDelete(course.id)} variant="contained" color="error">
+          <Button onClick={handleDelete} variant="contained" color="error" sx={{ mr: 1 }}>
             Deletar
           </Button>
         )}

@@ -14,17 +14,20 @@ const CreateCoursePage = () => {
   const styles = getCreateCoursePageStyles(theme);
 
   const handleCreateCourse = async (data) => {
-    try {
-      const payload = {
-        ...data,
-        creator_id: user.id,
-        instructors: [],
-      };
-      await createCourse(payload);
-      navigate('/dashboard');
-    } catch (error) {
-      console.error("Erro ao criar o curso:", error);
-    }
+    const payload = {
+      ...data,
+      creator_id: user.id,
+      instructors: [],
+    };
+    await createCourse(payload);
+  };
+
+  const handleSuccess = () => {
+    navigate('/dashboard');
+  };
+
+  const handleCancel = () => {
+    navigate('/dashboard');
   };
 
   return (
@@ -38,6 +41,8 @@ const CreateCoursePage = () => {
           <CourseForm
             variant="create"
             onSave={handleCreateCourse}
+            onCancel={handleCancel}
+            onSuccess={handleSuccess}
           />
         </Box>
       </Paper>
