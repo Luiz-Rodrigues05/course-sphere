@@ -29,6 +29,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/login" element={<Login />} />
+      <Route path="/index.html" element={<Navigate to="/dashboard" replace />} />
 
       <Route element={<AuthGuard />}>
         <Route element={<ProtectedLayout />}>
